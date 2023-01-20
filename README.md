@@ -1,5 +1,7 @@
 # Skirmish Server
 
+![Skirmish Logo - Showing the Text Skirmish and a phaser](https://raw.githubusercontent.com/skrmsh/skirmish-assets/main/logo/Logo_TextUnderlinedNoBackground.svg)
+
 ## Setup
 Install requirements using `pip install -r requirements.txt`
 
