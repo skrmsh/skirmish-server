@@ -29,9 +29,11 @@ ClientManager.set_socketio(socketio)
 from skirmserv.api.user import UserAPI
 from skirmserv.api.user import AuthAPI
 from skirmserv.api.game import GameAPI
+from skirmserv.api.gamemode import GamemodeAPI
 flask_api.add_resource(UserAPI, "/user")
 flask_api.add_resource(AuthAPI, "/auth")
 flask_api.add_resource(GameAPI, "/game/<string:gid>")
+flask_api.add_resource(GamemodeAPI, "/gamemode")
 
 # Test Route serving SocketIO test client
 @app.route("/siotest")
