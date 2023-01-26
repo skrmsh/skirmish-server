@@ -96,3 +96,6 @@ class Deathmatch(Gamemode):
         # Killing Shot
         elif opponent.health == 0:
             player.points += 500
+
+        player.client.current_actions.add(player.client.ACTION_SHOT_HIT)
+        player.client.current_data.update({"name": opponent.name})
