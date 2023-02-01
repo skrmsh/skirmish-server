@@ -83,7 +83,7 @@ class Player(object):
         self.game.gamemode.player_send_shot(self, sid)
 
     def got_hit(self, pid:int, sid:int) -> None:
-        """This function is called when the phaser/breast calls the
+        """This function is called when the phaser/vest calls the
         Got Hit action with sid/pid parameter."""
         
         # Get the opponent by player id
