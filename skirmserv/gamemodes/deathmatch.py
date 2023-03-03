@@ -38,8 +38,30 @@ class Deathmatch(Gamemode):
         self.color_offset = random.randint(0, 100) / 100.0
 
         self._already_hit = set()
-
+        self._reset_time = 0
         self._inviolable_time = 6 # How many seconds inviolable after got hit
+
+    def reset(self) -> None:
+        self._already_hit = set()
+        self._reset_time = time.time()
+    
+    def reset_player(self, player: Player) -> None:
+        player.health = 100
+        player.points = 0
+
+        # set player color
+        # +1 to prevent that the first and last player have the same color
+        hue = self.game.get_player_index(player) / (self.game.get_player_count() + 1)
+        hue = (hue + self.color_offset) % 1
+        norm_rgb = colorsys.hsv_to_rgb(hue, 1, 1)
+        rgb = list(map(lambda x: int(x * 255), norm_rgb))
+        player.color = rgb
+
+        # Let everybody start at the same time again
+        player.inviolable = False
+        player.inviolable_until = self._reset_time + self.game.start_delay
+        player.phaser_enable = True
+        player.phaser_disable_until = self._reset_time + self.game.start_delay
     
     def player_joined(self, player: Player) -> None:
         player.health = 100

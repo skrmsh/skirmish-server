@@ -69,18 +69,27 @@ class GameAPI(Resource):
 
     @requires_auth
     def put(self, gid: str, user: UserModel):
-        """Starts the game in "delay" seconds"""
+        """Changes something at the specified game based on given args"""
         args = game_start_reqparser.parse_args()
 
         game = get_game_or_abort(gid)
 
-        is_scheduled = game.schedule_start(args.get("delay"))
+        arg_delay = args.get("delay", None)
+        if arg_delay is not None: # Delay
+            is_scheduled = game.schedule_start(args.get("delay"))
         
-        if is_scheduled:
-            return {}, 204
-        else:
-            abort(409, message="The game is currently not valid to start")
+            if is_scheduled:
+                return {}, 204
+            else:
+                abort(409, message="The game is currently not valid to start")
+        
+        args_reset = args.get("reset", None)
+        if args_reset is not None:
+            game.reset()
 
+            return {}, 204
+
+        abort(406, message="No valid fields")
 
     @requires_auth
     def delete(self, gid: str, user: UserModel):

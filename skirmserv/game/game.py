@@ -26,6 +26,7 @@ class Game(object):
         # Timestamp for the scheduled start
         # 0 -> no start scheduled
         self.start_time = 0
+        self.start_delay = 0
 
         # Sets of players and teams which are part of this game
         self.players = {}
@@ -67,7 +68,8 @@ class Game(object):
         if not self.gamemode.is_game_valid():
             return False
         
-        self.start_time = time.time() + delay
+        self.start_delay = delay
+        self.start_time = time.time() + self.start_delay
 
         for player in self.players.values():
             # Let the gamemode handle things that happen on game start
@@ -77,6 +79,20 @@ class Game(object):
             player.client.update()
 
         return True
+    
+    def reset(self) -> None:
+        """Resets an already started game"""
+        if not self.start_time > 0: # Game not started
+            return
+        
+        self.gamemode.reset()
+
+        for player in self.players.values():
+            # Reset player data
+            self.gamemode.reset_player(player)
+
+            # Inform the player
+            player.client.update()
 
     def close(self) -> None:
         """Close this game"""

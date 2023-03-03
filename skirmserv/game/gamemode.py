@@ -77,3 +77,11 @@ class Gamemode(object):
             return False
 
         return True
+    
+    def reset(self) -> None:
+        """Resets an already started game"""
+        pass
+
+    def reset_player(self, player: Player) -> None:
+        """Resets the player in an already started game"""
+        pass
