@@ -104,6 +104,8 @@ class Player(object):
         self.client.update()
         opponent.client.update()
 
+        self.game.update_spectators()
+
     def close(self) -> None:
         """This function is called when the game will close"""
         raise NotImplementedError("Todo: Player Close")

@@ -30,6 +30,14 @@ class Game(object):
         # Sets of players and teams which are part of this game
         self.players = {}
         self.teams = {}
+
+        # Spectators spectating this game
+        self.spectators = set()
+
+    def update_spectators(self) -> None:
+        """Updates all spectators for this game"""
+        for spectator in self.spectators:
+            spectator.update()
     
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
@@ -56,11 +64,13 @@ class Game(object):
         """Adds the given player to this game"""
         self.players.update({player.pid: player})
         self.gamemode.player_joined(player)
+        self.update_spectators()
 
     def remove_player(self, player: Player) -> None:
         """Removes the given player from this game"""
         self.players.pop(player.pid)
         self.gamemode.player_leaving(player)
+        self.update_spectators()
 
     def schedule_start(self, delay: int) -> bool:
         """Schedules the game start in delay seconds"""
@@ -76,11 +86,14 @@ class Game(object):
             # Inform the player about updates
             player.client.update()
 
+        self.update_spectators()
+
         return True
 
     def close(self) -> None:
         """Close this game"""
         raise NotImplementedError("Todo: Implement close game")
+        #self.update_spectators()
 
     def get_team_rank(self, team:Team) -> int:
         """Returns the rank of the given team. Returns -1 if the
