@@ -106,6 +106,9 @@ class Player(object):
 
         self.game.update_spectators()
 
+        for spectator in self.game.spectators:
+            spectator.player_got_hit(self, opponent, sid)
+
     def close(self) -> None:
         """This function is called when the game will close"""
         raise NotImplementedError("Todo: Player Close")

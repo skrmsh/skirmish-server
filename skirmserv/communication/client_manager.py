@@ -112,6 +112,10 @@ class ClientManager(object):
     def _join_spectator(self, socket_id: str, gid: str) -> Spectator:
         game = GameManager.get_game(gid)
 
+        current_spectator = self.spectators.get(socket_id, None)
+        if current_spectator is not None:
+            current_spectator.close()
+
         if game is not None:
             spectator = Spectator(socket_id, game, self.socketio)
             self.spectators.update({socket_id: spectator})
