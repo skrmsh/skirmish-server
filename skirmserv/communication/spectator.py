@@ -47,3 +47,11 @@ class Spectator(object):
                 "sid": sid
             }
         }))
+
+    def player_fired_shot(self, player: Player, sid: int) -> None:
+        self.socketio.emit("spectate", json.dumps({
+            "shot": {
+                "player": player.get_pgt_data(),
+                "sid": sid
+            }
+        }))
