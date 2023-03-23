@@ -81,6 +81,9 @@ class Player(object):
         """This function is called when the phaser calls the
         Send Shot action with sid parameter."""
         self.game.gamemode.player_send_shot(self, sid)
+        
+        for spectator in self.game.spectators:
+            spectator.player_fired_shot(self, sid)
 
     def got_hit(self, pid:int, sid:int) -> None:
         """This function is called when the phaser/breast calls the
@@ -103,6 +106,11 @@ class Player(object):
         # inform both clients about updates
         self.client.update()
         opponent.client.update()
+
+        self.game.update_spectators()
+
+        for spectator in self.game.spectators:
+            spectator.player_got_hit(self, opponent, sid)
 
     def close(self) -> None:
         """This function is called when the game will close"""

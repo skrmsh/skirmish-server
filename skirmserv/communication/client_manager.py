@@ -5,7 +5,10 @@ Copyright (C) 2022 Ole Lange
 """
 
 from skirmserv.communication import SocketClient
+from skirmserv.communication.spectator import Spectator
 from skirmserv.models.user import UserModel
+
+from skirmserv.game.game_manager import GameManager
 
 from flask import request
 from flask import current_app
@@ -35,6 +38,7 @@ class ClientManager(object):
 
         self.socketio = None
         self.clients = {} # key is socket_id, value is socketclient object
+        self.spectators = {} # key is socket_id, value is spectator object
     
     # Singleton Wrapper methods
     @staticmethod
@@ -53,6 +57,11 @@ class ClientManager(object):
         a client with the given access token from another socket, the socket is
         replaced with the new one."""
         return ClientManager.get_instance()._join_client(access_token, socket_id)
+    
+    @staticmethod
+    def join_spectator(socket_id: str, gid: str) -> Spectator:
+        """Creates a new Spectator object for the given game and stores it."""
+        return ClientManager.get_instance()._join_spectator(socket_id, gid)
 
     # Singleton Wrapper wrapped methods
     def _get_client(self, socket_id):
@@ -100,6 +109,21 @@ class ClientManager(object):
         print("Joined client: User: {0}, Socket: {1}".format(user, socket_id))
         return new_client
     
+    def _join_spectator(self, socket_id: str, gid: str) -> Spectator:
+        game = GameManager.get_game(gid)
+
+        current_spectator = self.spectators.get(socket_id, None)
+        if current_spectator is not None:
+            current_spectator.close()
+
+        if game is not None:
+            spectator = Spectator(socket_id, game, self.socketio)
+            self.spectators.update({socket_id: spectator})
+
+            print("Joined spectator: Socket: {0}, Game {1}".format(socket_id, game.gid))
+            
+            return spectator
+    
     def _set_socketio(self, socketio: SocketIO) -> None:
         """Set socketio server"""
         self.socketio = socketio
@@ -139,6 +163,20 @@ class ClientManager(object):
             if client is not None:
                 client.on_receive(data)
 
+        # Callback for messages on "spectate" event
+        def socketio_spectate(data: dict) -> None:
+            socket_id = request.sid
+            gid = data.get("gid", None)
+
+            if socket_id is None or gid is None:
+                return
+            
+            spectator = ClientManager.join_spectator(socket_id, gid)
+
+            if spectator is None:
+                data = json.dumps({"error": "Error spectating the specified game"})
+
         # Pass the callbacks to the socketio server
         self.socketio.on_event("join", socketio_join)
         self.socketio.on_event("message", socketio_message)
+        self.socketio.on_event("spectate", socketio_spectate)

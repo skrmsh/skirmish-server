@@ -3,3 +3,4 @@ flask-socketio
 flask-restful
 peewee
 argon2-cffi
+simple-websocket
