@@ -13,23 +13,23 @@ from skirmserv.api import requires_auth
 
 # Request argument parser for user registration.
 user_register_reqparse = reqparse.RequestParser()
-user_register_reqparse.add_argument("name",
-    type=str, help="name field is required", required=True)
-user_register_reqparse.add_argument("email",
-    type=str, help="email field is required", required=True)
-user_register_reqparse.add_argument("password",
-    type=str, help="password field is required", required=True)
+user_register_reqparse.add_argument(
+    "name", type=str, help="name field is required", required=True
+)
+user_register_reqparse.add_argument(
+    "email", type=str, help="email field is required", required=True
+)
+user_register_reqparse.add_argument(
+    "password", type=str, help="password field is required", required=True
+)
+
 
 class UserAPI(Resource):
-
     @requires_auth
     def get(self, user: UserModel):
         """Returns base information about the user"""
-        return {
-            "username": user.name, 
-            "email": user.email
-        }
-    
+        return {"username": user.name, "email": user.email}
+
     def post(self):
         """Registers a new user.
         Todo: Figure out if its a good idea to do this
@@ -41,15 +41,13 @@ class UserAPI(Resource):
         if existing_user is not None:
             abort(409, message="Email Adress already in use!")
 
-        user = UserModel.register(args.get("name"), 
-            args.get("email"), args.get("password"))
+        user = UserModel.register(
+            args.get("name"), args.get("email"), args.get("password")
+        )
 
         access_token = user.generate_access_token()
 
-        return {
-            "message": "user_created",
-            "access_token": access_token
-        }, 201
+        return {"message": "user_created", "access_token": access_token}, 201
 
     @requires_auth
     def delete(self, user: UserModel):
@@ -57,15 +55,18 @@ class UserAPI(Resource):
         user.delete_instance()
         return {}, 204
 
+
 # Request argument parser for users to login
 user_login_reqparse = reqparse.RequestParser()
-user_login_reqparse.add_argument("email",
-    type=str, help="Email field is required to login", required=True)
-user_login_reqparse.add_argument("password",
-    type=str, help="Password field is required to login", required=True)
+user_login_reqparse.add_argument(
+    "email", type=str, help="Email field is required to login", required=True
+)
+user_login_reqparse.add_argument(
+    "password", type=str, help="Password field is required to login", required=True
+)
+
 
 class AuthAPI(Resource):
-
     def post(self):
         """
         Creates a new access token for the user authenticated by email and
@@ -82,7 +83,4 @@ class AuthAPI(Resource):
         # Generate a new access token
         access_token = user.generate_access_token()
 
-        return {
-            "message": "authenticated",
-            "access_token": access_token
-        }, 200
+        return {"message": "authenticated", "access_token": access_token}, 200

@@ -11,11 +11,14 @@ from flask import current_app
 
 from playhouse.shortcuts import ReconnectMixin
 
+
 class ReconnectingMySQLDatabase(ReconnectMixin, MySQLDatabase):
     pass
 
+
 class ReconnectingPostgresqlDatabase(ReconnectMixin, PostgresqlDatabase):
     pass
+
 
 class Database(object):
     instance = None
@@ -43,27 +46,37 @@ class Database(object):
         Database.instance = self
 
         if current_app.config["DB_TYPE"] == "sqlite":
-            current_app.logger.info("SQLite DB Type configured @ " + current_app.config["DB_LOCATION"])
+            current_app.logger.info(
+                "SQLite DB Type configured @ " + current_app.config["DB_LOCATION"]
+            )
             self._db = SqliteDatabase(current_app.config["DB_LOCATION"])
-        
+
         elif current_app.config["DB_TYPE"] == "mysql":
-            current_app.logger.info("MySQL DB Type configured @ {0} ({1})".format(current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]))
+            current_app.logger.info(
+                "MySQL DB Type configured @ {0} ({1})".format(
+                    current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]
+                )
+            )
             self._db = ReconnectingMySQLDatabase(
                 current_app.config["DB_DATABASE"],
                 user=current_app.config["DB_USER"],
                 password=current_app.config["DB_PASS"],
                 host=current_app.config["DB_HOST"],
-                port=current_app.config.get("DB_PORT", 3306)
+                port=current_app.config.get("DB_PORT", 3306),
             )
-        
+
         elif current_app.config["DB_TYPE"] == "postgresql":
-            current_app.logger.info("Postgresql DB Type configured @ {0} ({1})".format(current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]))
+            current_app.logger.info(
+                "Postgresql DB Type configured @ {0} ({1})".format(
+                    current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]
+                )
+            )
             self._db = ReconnectingPostgresqlDatabase(
                 current_app.config["DB_DATABASE"],
                 user=current_app.config["DB_USER"],
                 password=current_app.config["DB_PASS"],
                 host=current_app.config["DB_HOST"],
-                port=current_app.config.get("DB_PORT", 5432)
+                port=current_app.config.get("DB_PORT", 5432),
             )
 
         else:

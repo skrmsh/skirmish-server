@@ -7,6 +7,7 @@ Copyright (C) 2022 Ole Lange
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from skirmserv.game.player import Player
     from skirmserv.game.game import Game
@@ -16,6 +17,7 @@ from skirmserv.game.gamemode import Gamemode
 import time
 import colorsys
 import random
+
 
 class Deathmatch(Gamemode):
     """
@@ -28,7 +30,7 @@ class Deathmatch(Gamemode):
     If the player has no health left the phaser turns off and the player
     is removed from the game. The game is finished if only one player survived
     """
-    
+
     def __init__(self, game: Game):
         super().__init__(game)
 
@@ -39,8 +41,8 @@ class Deathmatch(Gamemode):
 
         self._already_hit = set()
 
-        self._inviolable_time = 6 # How many seconds inviolable after got hit
-    
+        self._inviolable_time = 6  # How many seconds inviolable after got hit
+
     def player_joined(self, player: Player) -> None:
         player.health = 100
         player.points = 0
@@ -66,9 +68,9 @@ class Deathmatch(Gamemode):
         player.phaser_disable_until = self.game.start_time
 
     def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
-
         # Check if this sid has already hit another player
-        if self.has_shot_hit(player, sid): return
+        if self.has_shot_hit(player, sid):
+            return
 
         self.mark_shot_hit(player, sid)
 
@@ -86,9 +88,8 @@ class Deathmatch(Gamemode):
             player.color = [0, 0, 0]
 
         player.client.current_actions.add(player.client.ACTION_HIT_VALID)
-    
-    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
 
+    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
         # Normal Hit
         if opponent.health > 0:
             player.points += 100

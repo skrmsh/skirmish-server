@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from skirmserv.game.game import Game
     from skirmserv.game.player import Player
 
+
 class Team(object):
-    
     def __init__(self, game: Game, tid: int):
         self.game = None
         self.players = set()

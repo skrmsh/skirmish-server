@@ -16,8 +16,8 @@ from flask_socketio import SocketIO
 
 import json
 
-class ClientManager(object):
 
+class ClientManager(object):
     instance = None
 
     @staticmethod
@@ -37,9 +37,9 @@ class ClientManager(object):
         ClientManager.instance = self
 
         self.socketio = None
-        self.clients = {} # key is socket_id, value is socketclient object
-        self.spectators = {} # key is socket_id, value is spectator object
-    
+        self.clients = {}  # key is socket_id, value is socketclient object
+        self.spectators = {}  # key is socket_id, value is spectator object
+
     # Singleton Wrapper methods
     @staticmethod
     def get_client(socket_id):
@@ -50,19 +50,19 @@ class ClientManager(object):
     def set_socketio(socketio: SocketIO) -> None:
         """Set socketio server"""
         return ClientManager.get_instance()._set_socketio(socketio)
-    
+
     @staticmethod
     def join_client(access_token: str, socket_id: str) -> SocketClient:
         """Creates a new SocketClient object and stores it. If there is already
         a client with the given access token from another socket, the socket is
         replaced with the new one."""
         return ClientManager.get_instance()._join_client(access_token, socket_id)
-    
+
     @staticmethod
     def join_spectator(socket_id: str, gid: str) -> Spectator:
         """Creates a new Spectator object for the given game and stores it."""
         return ClientManager.get_instance()._join_spectator(socket_id, gid)
-    
+
     @staticmethod
     def get_spectator(socket_id: str) -> Spectator:
         """Returns the spectator object from this socket"""
@@ -72,7 +72,7 @@ class ClientManager(object):
     def _get_client(self, socket_id):
         """Returns the client associated with this socket."""
         return self.clients.get(socket_id, None)
-    
+
     def _join_client(self, access_token: str, socket_id: str) -> SocketClient:
         """Creates a new SocketClient object and stores it. If there is already
         a client with the given access token from another socket, the socket is
@@ -113,7 +113,7 @@ class ClientManager(object):
         self.clients.update({socket_id: new_client})
         print("Joined client: User: {0}, Socket: {1}".format(user, socket_id))
         return new_client
-    
+
     def _join_spectator(self, socket_id: str, gid: str) -> Spectator:
         game = GameManager.get_game(gid)
 
@@ -126,13 +126,13 @@ class ClientManager(object):
             self.spectators.update({socket_id: spectator})
 
             print("Joined spectator: Socket: {0}, Game {1}".format(socket_id, game.gid))
-            
+
             return spectator
-        
+
     def _get_spectator(self, socket_id: str) -> Spectator:
         """Returns the spectator object assigned to the specified socket_id"""
         return self.spectators.get(socket_id, None)
-    
+
     def _set_socketio(self, socketio: SocketIO) -> None:
         """Set socketio server"""
         self.socketio = socketio
@@ -201,7 +201,6 @@ class ClientManager(object):
             if spectator is not None:
                 spectator.close()
                 ClientManager.get_instance().spectators.pop(sid)
-
 
         # Pass the callbacks to the socketio server
         self.socketio.on_event("join", socketio_join)

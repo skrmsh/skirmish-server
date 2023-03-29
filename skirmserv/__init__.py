@@ -13,16 +13,18 @@ from flask import render_template
 # Creating Flask app & SocketIO server
 app = Flask(__name__)
 app.config.from_envvar("SKIRMSERV_CFG")
-socketio = SocketIO(app, cors_allowed_origins='*') # Socket IO websocket app
-flask_api = Api(app) # Restful api
+socketio = SocketIO(app, cors_allowed_origins="*")  # Socket IO websocket app
+flask_api = Api(app)  # Restful api
 
 # Initialize the Database connection
 with app.app_context():
     from skirmserv.models import Database
+
     Database()
 
 # Create ClientManager and set SocketIO server to receive and send messages
 from skirmserv.communication.client_manager import ClientManager
+
 ClientManager.set_socketio(socketio)
 
 # Register Resources to the API
@@ -30,10 +32,12 @@ from skirmserv.api.user import UserAPI
 from skirmserv.api.user import AuthAPI
 from skirmserv.api.game import GameAPI
 from skirmserv.api.gamemode import GamemodeAPI
+
 flask_api.add_resource(UserAPI, "/user")
 flask_api.add_resource(AuthAPI, "/auth")
 flask_api.add_resource(GameAPI, "/game/<string:gid>")
 flask_api.add_resource(GamemodeAPI, "/gamemode")
+
 
 # Test Route serving SocketIO test client
 @app.route("/siotest")

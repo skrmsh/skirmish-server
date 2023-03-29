@@ -11,6 +11,7 @@ from flask_restful import abort
 
 from functools import wraps
 
+
 def requires_auth(endpoint):
     """
     Wraps an endpoint that requires a valid access token to be

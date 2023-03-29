@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from skirmserv.models.user import UserModel
 
 from flask import request
-from flask_socketio import SocketIO # Just for typing
+from flask_socketio import SocketIO  # Just for typing
 import json
 
 from skirmserv.game.player import Player
@@ -19,8 +19,8 @@ from skirmserv.game.game import Game
 from skirmserv.game.team import Team
 from skirmserv.game.game_manager import GameManager
 
-class SocketClient(object):
 
+class SocketClient(object):
     # Action codes
     ACTION_KEEP_ALIVE = 0
     ACTION_TIMESYNC = 1
@@ -37,7 +37,7 @@ class SocketClient(object):
     ACTION_FULL_DATA_UPDATE = 12
     ACTION_SERVER_JOIN_DENIED = 13
     ACTION_INVALID_GAME = 14
-    
+
     def __init__(self, socket_id: str, user: UserModel, socketio: SocketIO):
         self.socket_id = socket_id
         self.user = user
@@ -103,9 +103,7 @@ class SocketClient(object):
         """Sends this client a update with all triggered actions and data"""
 
         # Create data object with actions
-        data = {
-            "a": list(self.current_actions)
-        }
+        data = {"a": list(self.current_actions)}
         # and add (parameter) data
         data.update(self.current_data)
 
@@ -136,7 +134,7 @@ class SocketClient(object):
                 new_value = new_pgt.get(key, None)
                 if old_value != new_value:
                     pgt_diff.update({key: new_value})
-                
+
             self.last_sent_pgt_data = new_pgt
 
             # Update data (which will be send) with all changed fields
@@ -149,11 +147,10 @@ class SocketClient(object):
             # update data with all fields
             data.update(new_pgt)
 
-        
         # Clear current actions and (param) data
         self.current_actions.clear()
         self.current_data.clear()
-        
+
         # Send data to the socket
         self.send(data)
 
@@ -213,7 +210,6 @@ class SocketClient(object):
     def _on_got_hit(self, data):
         """Got Hit Event triggered by client"""
         if self.player is not None:
-
             # Get pid and sid fields
             pid = data.get("pid", None)
             sid = data.get("sid", None)
@@ -228,7 +224,6 @@ class SocketClient(object):
     def _on_send_shot(self, data):
         """Send Shot event triggered by client"""
         if self.player is not None:
-
             # Get sid field
             sid = data.get("sid", None)
 

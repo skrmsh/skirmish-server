@@ -11,13 +11,11 @@ from flask_restful import abort
 
 from skirmserv.gamemodes import available_gamemodes
 
-class GamemodeAPI(Resource):
 
+class GamemodeAPI(Resource):
     def get(self):
         """Returns all available gamemodes"""
-        
+
         gm_strings = list(available_gamemodes.keys())
 
-        return {
-            "gamemodes": gm_strings
-        }, 200
+        return {"gamemodes": gm_strings}, 200

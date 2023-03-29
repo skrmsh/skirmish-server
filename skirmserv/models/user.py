@@ -9,10 +9,11 @@ from __future__ import annotations
 import peewee
 from skirmserv.models import Database
 
-from argon2 import PasswordHasher # used for password hashing
-from hashlib import sha256 # used for token hashing
+from argon2 import PasswordHasher  # used for password hashing
+from hashlib import sha256  # used for token hashing
 
 from secrets import token_urlsafe
+
 
 class UserModel(peewee.Model):
     """
@@ -70,7 +71,7 @@ class UserModel(peewee.Model):
         user.set_password(plaintext_password)
         user.save()
         return user
-        
+
     @staticmethod
     def authenticate(email: str, plaintext_password: str) -> UserModel | None:
         """Returns an user model based on the given email and password"""
@@ -86,7 +87,8 @@ class UserModel(peewee.Model):
 
         # Do not allow empty access_token's. Maybe not nessecary but better
         # safe than sorry :D
-        if access_token == "": return
+        if access_token == "":
+            return
 
         token_hash = sha256(access_token.encode("ASCII")).hexdigest()
         user = UserModel.get_or_none(UserModel.access_token == token_hash)
@@ -94,6 +96,7 @@ class UserModel(peewee.Model):
 
     class Meta:
         database = Database.get()
+
 
 # Creating the table directly on import
 Database.register_models(UserModel)

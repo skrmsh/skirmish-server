@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 
 
 class Gamemode(object):
-    
     def __init__(self, game: Game):
         self.game = game
 
@@ -27,12 +26,12 @@ class Gamemode(object):
     # Helper methods
     def mark_shot_hit(self, player: Player, sid: int) -> None:
         """Marks that the given shot has hit someone"""
-        psid = (sid << 8 | player.pid) # Combined player / shot id
+        psid = sid << 8 | player.pid  # Combined player / shot id
         self._already_hit.add(psid)
 
     def has_shot_hit(self, player: Player, sid: int) -> bool:
         """Returns if the given shot has already hit someone"""
-        psid = (sid << 8 | player.pid) # Combined player / shot id
+        psid = sid << 8 | player.pid  # Combined player / shot id
         return psid in self._already_hit
 
     # Events to override

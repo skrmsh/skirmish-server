@@ -6,6 +6,7 @@ Copyright (C) 2022 Ole Lange
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from skirmserv.communication import SocketClient
     from skirmserv.models.user import UserModel
@@ -16,8 +17,8 @@ from skirmserv.gamemodes import available_gamemodes
 
 from skirmserv.util.words import get_random_word_string
 
-class GameManager(object):
 
+class GameManager(object):
     instance = None
 
     @staticmethod
@@ -54,7 +55,7 @@ class GameManager(object):
     def start_game(gid: str, delay: int) -> None:
         """Startes the game with the given gid in `delay` seconds"""
         return GameManager.get_instance()._start_game(gid, delay)
-    
+
     @staticmethod
     def join_game(game: Game, client: SocketClient) -> Player:
         """Joines this client to the game with the given gid. Returns the
@@ -77,7 +78,7 @@ class GameManager(object):
     def _get_game(self, gid: str) -> Game:
         """Returns the game with the given gid"""
         return self.games.get(gid, None)
-    
+
     def _create_game(self, gamemode: str, created_by: UserModel) -> str:
         """Creates a new Game instance with the given Gamemode and stores it
         returns the gameid (gid)"""
@@ -103,7 +104,6 @@ class GameManager(object):
 
         return gid
 
-    
     def _start_game(self, gid: str, delay: int) -> None:
         """Startes the game with the given gid in `delay` seconds"""
         raise NotImplementedError("Todo: Start Game")
@@ -150,11 +150,10 @@ class GameManager(object):
         client.clear_player()
         client.clear_game()
         # Todo: Do this for teams too
-        
 
     def _close_game(self, gid: str) -> None:
         """Closes the game with the given gid."""
-        
+
         # Get game by gid
         game = self._get_game(gid)
 
