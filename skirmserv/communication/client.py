@@ -238,3 +238,6 @@ class SocketClient(object):
 
             # Trigger send_shot method from associated player
             self.player.send_shot(sid)
+
+    def close(self):
+        pass
