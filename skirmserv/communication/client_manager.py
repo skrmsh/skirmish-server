@@ -62,6 +62,11 @@ class ClientManager(object):
     def join_spectator(socket_id: str, gid: str) -> Spectator:
         """Creates a new Spectator object for the given game and stores it."""
         return ClientManager.get_instance()._join_spectator(socket_id, gid)
+    
+    @staticmethod
+    def get_spectator(socket_id: str) -> Spectator:
+        """Returns the spectator object from this socket"""
+        return ClientManager.get_instance()._get_spectator(socket_id)
 
     # Singleton Wrapper wrapped methods
     def _get_client(self, socket_id):
@@ -123,6 +128,10 @@ class ClientManager(object):
             print("Joined spectator: Socket: {0}, Game {1}".format(socket_id, game.gid))
             
             return spectator
+        
+    def _get_spectator(self, socket_id: str) -> Spectator:
+        """Returns the spectator object assigned to the specified socket_id"""
+        return self.spectators.get(socket_id, None)
     
     def _set_socketio(self, socketio: SocketIO) -> None:
         """Set socketio server"""
@@ -167,16 +176,36 @@ class ClientManager(object):
         def socketio_spectate(data: dict) -> None:
             socket_id = request.sid
             gid = data.get("gid", None)
+            close = data.get("close", None)
 
-            if socket_id is None or gid is None:
+            if socket_id is None or (gid is None and close is None):
                 return
-            
-            spectator = ClientManager.join_spectator(socket_id, gid)
 
-            if spectator is None:
-                data = json.dumps({"error": "Error spectating the specified game"})
+            spectator = ClientManager.get_spectator(socket_id)
+
+            if close is not None and spectator is not None:
+                spectator.close()
+
+            if gid is not None:
+                spectator = ClientManager.join_spectator(socket_id, gid)
+
+        # Callback for disconnect socket event
+        def on_socket_disconnect() -> None:
+            sid = request.sid
+
+            client = ClientManager.get_client(sid)
+            if client is not None:
+                client.close()
+
+            spectator = ClientManager.get_spectator(sid)
+            if spectator is not None:
+                spectator.close()
+                ClientManager.get_instance().spectators.pop(sid)
+
 
         # Pass the callbacks to the socketio server
         self.socketio.on_event("join", socketio_join)
         self.socketio.on_event("message", socketio_message)
         self.socketio.on_event("spectate", socketio_spectate)
+
+        self.socketio.on_event("disconnect", on_socket_disconnect)
