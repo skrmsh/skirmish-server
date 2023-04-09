@@ -1,6 +1,8 @@
-flask
-flask-socketio
-flask-restful
+Flask
+Flask-RESTful
+Flask-SocketIO
 peewee
 argon2-cffi
 simple-websocket
+gunicorn==20.1.0
+eventlet==0.30.2
