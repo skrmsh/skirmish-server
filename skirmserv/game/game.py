@@ -22,6 +22,7 @@ class Game(object):
         self.gid = gid
 
         self.created_by = created_by
+        self.created_at = time.time()
 
         # Timestamp for the scheduled start
         # 0 -> no start scheduled
@@ -46,6 +47,8 @@ class Game(object):
             "g_player_count": self.get_player_count(),
             "g_team_count": self.get_team_count(),
             "g_start_time": int(self.start_time),
+            "g_created_at": int(self.created_at),
+            "g_created_by": self.created_by.name,
         }
 
     def get_next_pid(self) -> int:
