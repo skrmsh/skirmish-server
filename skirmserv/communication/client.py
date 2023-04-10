@@ -207,6 +207,8 @@ class SocketClient(object):
         """Leave Game Event triggered by client"""
         GameManager.leave_game(self)
 
+        self.reset()
+
     def _on_got_hit(self, data):
         """Got Hit Event triggered by client"""
         if self.player is not None:
@@ -235,4 +237,5 @@ class SocketClient(object):
             self.player.send_shot(sid)
 
     def close(self):
-        pass
+        """Called when the websocket connection was closed"""
+        self._on_leave_game(None)
