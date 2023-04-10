@@ -163,3 +163,6 @@ class GameManager(object):
 
         # Close the game
         game.close()
+
+        self.games.pop(game.gid)
+        del game
