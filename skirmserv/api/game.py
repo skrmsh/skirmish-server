@@ -60,6 +60,8 @@ class GameAPI(Resource):
             "player_count": game.get_player_count(),
             "team_count": game.get_team_count(),
             "valid": game.gamemode.is_game_valid(),
+            "created_at": game.created_at,
+            "created_by": game.created_by.name,
         }, 200
 
     @requires_auth
@@ -111,6 +113,8 @@ class GamesAPI(Resource):
                     "player_count": game.get_player_count(),
                     "team_count": game.get_team_count(),
                     "valid": game.gamemode.is_game_valid(),
+                    "created_at": game.created_at,
+                    "created_by": game.created_by.name,
                 }
             )
 
