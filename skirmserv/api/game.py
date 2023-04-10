@@ -95,3 +95,23 @@ class GameAPI(Resource):
         game.close()
 
         return {}, 204
+
+
+class GamesAPI(Resource):
+    def get(self):
+        """Get all currently running games"""
+
+        result = {"games": []}
+        for gid in GameManager.get_instance().games:
+            game = GameManager.get_game(gid)
+            result["games"].append(
+                {
+                    "gid": game.gid,
+                    "start_time": game.start_time,
+                    "player_count": game.get_player_count(),
+                    "team_count": game.get_team_count(),
+                    "valid": game.gamemode.is_game_valid(),
+                }
+            )
+
+        return result, 200
