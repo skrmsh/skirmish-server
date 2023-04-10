@@ -93,8 +93,16 @@ class Game(object):
 
     def close(self) -> None:
         """Close this game"""
-        raise NotImplementedError("Todo: Implement close game")
-        # self.update_spectators()
+        for player in self.players:
+            self.gamemode.player_leaving(player)
+            player.client.update()
+
+        del self.players
+        del self.teams
+
+        for spectator in self.spectators:
+            spectator.update()
+            spectator.close()
 
     def get_team_rank(self, team: Team) -> int:
         """Returns the rank of the given team. Returns -1 if the

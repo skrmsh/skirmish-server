@@ -151,6 +151,10 @@ class GameManager(object):
         client.clear_game()
         # Todo: Do this for teams too
 
+        # if game has no players left -> close game
+        if len(game.players) == 0:
+            self._close_game(game.gid)
+
     def _close_game(self, gid: str) -> None:
         """Closes the game with the given gid."""
 
@@ -159,3 +163,6 @@ class GameManager(object):
 
         # Close the game
         game.close()
+
+        self.games.pop(game.gid)
+        del game
