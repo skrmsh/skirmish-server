@@ -35,6 +35,7 @@ class Player(object):
         self.max_shot_interval = 1000
         self.inviolable = False
         self.inviolable_until = 0
+        self.inviolable_lights_off = True
 
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
@@ -56,6 +57,7 @@ class Player(object):
             "p_rank": self.get_rank(),
             "p_inviolable": self.inviolable,
             "p_inviolable_until": int(self.inviolable_until),
+            "p_inviolable_lights_off": self.inviolable_lights_off,
         }
 
     def add_ammo(self, amount: int) -> None:
