@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from skirmserv.game.game import Game
     from skirmserv.game.player import Player
 
+from logging import getLogger
+
 
 class Team(object):
     def __init__(self, game: Game, tid: int, name: str):
@@ -50,8 +52,17 @@ class Team(object):
         self.players.add(player)
         player.team = self
 
+        getLogger(__name__).debug("Joined player %s to team %s", str(player), str(self))
+
     def leave(self, player: Player):
         """Removes a player from this team"""
         if player in self.players:
             self.players.remove(player)
             player.team = None
+
+            getLogger(__name__).debug(
+                "Removed player %s from team %s", str(player), str(self)
+            )
+
+    def __str__(self):
+        return "{0} ({1})".format(self.name, self.tid)

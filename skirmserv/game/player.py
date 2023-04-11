@@ -12,6 +12,8 @@ if TYPE_CHECKING:
     from skirmserv.game.team import Team
     from skirmserv.communication.client import SocketClient
 
+from logging import getLogger
+
 
 class Player(object):
     def __init__(self, game: Game, client: SocketClient):
@@ -84,6 +86,10 @@ class Player(object):
         Send Shot action with sid parameter."""
         self.game.gamemode.player_send_shot(self, sid)
 
+        getLogger(__name__).debug(
+            "Player %s send shot %d in game %s", str(self), sid, str(self.game)
+        )
+
         for spectator in self.game.spectators:
             spectator.player_fired_shot(self, sid)
 
@@ -109,7 +115,16 @@ class Player(object):
         self.client.update()
         opponent.client.update()
 
-        self.game.update_spectators()
+        getLogger(__name__).debug(
+            "Player %s got hit by %s in game %s",
+            str(self),
+            str(opponent),
+            str(self.game),
+        )
 
+        self.game.update_spectators()
         for spectator in self.game.spectators:
             spectator.player_got_hit(self, opponent, sid)
+
+    def __str__(self):
+        return "{0} ({1})".format(self.name, self.pid)

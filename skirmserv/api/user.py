@@ -11,6 +11,8 @@ from flask_restful import abort
 from skirmserv.models.user import UserModel
 from skirmserv.api import requires_auth
 
+from logging import getLogger
+
 # Request argument parser for user registration.
 user_register_reqparse = reqparse.RequestParser()
 user_register_reqparse.add_argument(
@@ -47,11 +49,14 @@ class UserAPI(Resource):
 
         access_token = user.generate_access_token()
 
+        getLogger(__name__).info("Created user %s via API", str(user))
+
         return {"message": "user_created", "access_token": access_token}, 201
 
     @requires_auth
     def delete(self, user: UserModel):
         """Delete an authenticated user profile"""
+        getLogger(__name__).info("Delted user %s via API", str(user))
         user.delete_instance()
         return {}, 204
 
@@ -82,5 +87,7 @@ class AuthAPI(Resource):
 
         # Generate a new access token
         access_token = user.generate_access_token()
+
+        getLogger(__name__).debug("Authenticated user %s via API", str(user))
 
         return {"message": "authenticated", "access_token": access_token}, 200

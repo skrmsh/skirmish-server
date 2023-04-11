@@ -14,6 +14,8 @@ from flask import request
 from flask_socketio import SocketIO  # Just for typing
 import json
 
+from logging import getLogger
+
 from skirmserv.game.player import Player
 from skirmserv.game.game import Game
 from skirmserv.game.team import Team
@@ -63,6 +65,8 @@ class SocketClient(object):
         self.game = None
         self.player = None
 
+        getLogger(__name__).debug("Client %s resetted", str(self))
+
     def get_player(self) -> Player:
         """Returns the associated player object"""
         return self.player
@@ -74,6 +78,9 @@ class SocketClient(object):
     def set_player(self, player: Player) -> None:
         """Sets the associated player object"""
         self.player = player
+        getLogger(__name__).debug(
+            "Client %s associated with player %s", str(self), str(self.player)
+        )
 
     def get_game(self) -> Game:
         """Returns the currently joined game"""
@@ -86,6 +93,9 @@ class SocketClient(object):
     def set_game(self, game: Game) -> None:
         """Sets the currently joined game"""
         self.game = game
+        getLogger(__name__).debug(
+            "Client %s associated with game %s", str(self), str(self.game)
+        )
 
     def trigger_action(self, code: int, **param: dict) -> None:
         """Triggers the given action on the client with the given parameters.
@@ -93,6 +103,7 @@ class SocketClient(object):
         client.update is called the next time"""
         self.current_actions.add(code)
         self.current_data.update(param)
+        getLogger(__name__).debug("Triggered action %d on client %s", code, str(self))
 
     def set_field(self, field_data: dict) -> None:
         """Sets a field, will be send next time update is called"""
@@ -152,6 +163,8 @@ class SocketClient(object):
         # Send data to the socket
         self.send(data)
 
+        getLogger(__name__).debug("Updated data for client %s", str(self))
+
     def send(self, data: dict, event="message") -> None:
         """Sends the given data dictionary (in skirmish format) to the client"""
         if self.socket_id is not None:
@@ -177,6 +190,10 @@ class SocketClient(object):
                 self._on_send_shot(data)
             elif action == SocketClient.ACTION_FULL_DATA_UPDATE:
                 self.update(full=True)
+
+        getLogger(__name__).debug(
+            "Client %s received data: %s", str(self), json.dumps(data)
+        )
 
     def _on_join_game(self, data):
         """Join Game Event triggered by client"""
@@ -237,3 +254,7 @@ class SocketClient(object):
     def close(self):
         """Called when the websocket connection was closed"""
         self._on_leave_game(None)
+        getLogger(__name__).debug("Client %s closed", str(self))
+
+    def __str__(self):
+        return "{0} ({1})".format(self.user.name, self.socket_id)

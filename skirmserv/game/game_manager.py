@@ -17,6 +17,8 @@ from skirmserv.gamemodes import available_gamemodes
 
 from skirmserv.util.words import get_random_word_string
 
+from logging import getLogger
+
 
 class GameManager(object):
     instance = None
@@ -102,6 +104,8 @@ class GameManager(object):
         # Store the created instance
         self.games.update({gid: game})
 
+        getLogger(__name__).info("Created new game: %s (GM: %s)", str(game), gamemode)
+
         return gid
 
     def _start_game(self, gid: str, delay: int) -> None:
@@ -128,6 +132,8 @@ class GameManager(object):
         client.trigger_action(client.ACTION_JOINED_GAME)
         client.update()
 
+        getLogger(__name__).info("Joined player %s to game %s", str(player), str(game))
+
         return player
 
     def _leave_game(self, client: SocketClient) -> None:
@@ -151,6 +157,10 @@ class GameManager(object):
         client.clear_game()
         # Todo: Do this for teams too
 
+        getLogger(__name__).info(
+            "Removed player %s from game %s", str(player), str(game)
+        )
+
         # if game has no players left -> close game
         if len(game.players) == 0:
             self._close_game(game.gid)
@@ -163,6 +173,8 @@ class GameManager(object):
 
         # Close the game
         game.close()
+
+        getLogger(__name__).info("Closed game %s", str(game))
 
         self.games.pop(game.gid)
         del game

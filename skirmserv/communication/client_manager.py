@@ -15,6 +15,7 @@ from flask import current_app
 from flask_socketio import SocketIO
 
 import json
+from logging import getLogger
 
 
 class ClientManager(object):
@@ -105,13 +106,14 @@ class ClientManager(object):
             old_client.socket_id = socket_id
             self.clients.pop(old_socket_id)
             self.clients.update({socket_id: old_client})
-            print("RE-Joined client: User: {0}, Socket: {1}".format(user, socket_id))
+            getLogger(__name__).info("Re-Joined client: %s", str(old_client))
+
             return old_client
 
         # Else create a new SocketClient object, store it and return it
         new_client = SocketClient(socket_id, user, self.socketio)
         self.clients.update({socket_id: new_client})
-        print("Joined client: User: {0}, Socket: {1}".format(user, socket_id))
+        getLogger(__name__).info("Joined client: %s", str(new_client))
         return new_client
 
     def _join_spectator(self, socket_id: str, gid: str) -> Spectator:
@@ -125,7 +127,7 @@ class ClientManager(object):
             spectator = Spectator(socket_id, game, self.socketio)
             self.spectators.update({socket_id: spectator})
 
-            print("Joined spectator: Socket: {0}, Game {1}".format(socket_id, game.gid))
+            getLogger(__name__).info("Joined spectator: %s", str(spectator))
 
             return spectator
 
@@ -201,6 +203,8 @@ class ClientManager(object):
             if spectator is not None:
                 spectator.close()
                 ClientManager.get_instance().spectators.pop(sid)
+
+            getLogger(__name__).debug("Socket %s closed", sid)
 
         # Pass the callbacks to the socketio server
         self.socketio.on_event("join", socketio_join)

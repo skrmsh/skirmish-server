@@ -8,6 +8,7 @@ from peewee import SqliteDatabase
 from peewee import MySQLDatabase
 from peewee import PostgresqlDatabase
 from flask import current_app
+from logging import getLogger
 
 from playhouse.shortcuts import ReconnectMixin
 
@@ -39,6 +40,9 @@ class Database(object):
         db = Database.get()
         db.create_tables(models)
 
+        for model in models:
+            getLogger(__name__).debug("Registered table: %s", str(model))
+
     def __init__(self):
         # Don't override existing instance
         if Database.instance is not None:
@@ -46,13 +50,13 @@ class Database(object):
         Database.instance = self
 
         if current_app.config["DB_TYPE"] == "sqlite":
-            current_app.logger.info(
+            getLogger(__name__).info(
                 "SQLite DB Type configured @ " + current_app.config["DB_LOCATION"]
             )
             self._db = SqliteDatabase(current_app.config["DB_LOCATION"])
 
         elif current_app.config["DB_TYPE"] == "mysql":
-            current_app.logger.info(
+            getLogger(__name__).info(
                 "MySQL DB Type configured @ {0} ({1})".format(
                     current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]
                 )
@@ -66,7 +70,7 @@ class Database(object):
             )
 
         elif current_app.config["DB_TYPE"] == "postgresql":
-            current_app.logger.info(
+            getLogger(__name__).info(
                 "Postgresql DB Type configured @ {0} ({1})".format(
                     current_app.config["DB_HOST"], current_app.config["DB_DATABASE"]
                 )
