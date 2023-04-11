@@ -8,6 +8,7 @@ from flask_socketio import SocketIO  # Just for typing
 from skirmserv.game.game import Game
 
 import json
+from logging import getLogger
 
 
 class Spectator(object):
@@ -24,6 +25,7 @@ class Spectator(object):
         Removes the instance from the games list of spectators
         """
         self.game.spectators.remove(self)
+        getLogger(__name__).debug("Closed spectator %s", str(self))
 
     def update(self):
         """
@@ -44,6 +46,7 @@ class Spectator(object):
             ),
             to=self.socket_id,
         )
+        getLogger(__name__).debug("Updated spectator %s", str(self))
 
     def player_got_hit(self, player: Player, opponent: Player, sid: int):
         self.socketio.emit(
@@ -58,9 +61,18 @@ class Spectator(object):
                 }
             ),
         )
+        getLogger(__name__).debug(
+            "Informed spectator %s that player %s got hit", str(self), str(player)
+        )
 
     def player_fired_shot(self, player: Player, sid: int) -> None:
         self.socketio.emit(
             "spectate",
             json.dumps({"shot": {"player": player.get_pgt_data(), "sid": sid}}),
         )
+        getLogger(__name__).debug(
+            "Informed spectator %s that player %s fired a shot", str(self), str(player)
+        )
+
+    def __str__(self):
+        return "{0} ({1})".format(self.game, self.socket_id)

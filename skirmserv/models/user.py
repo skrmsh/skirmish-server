@@ -9,6 +9,8 @@ from __future__ import annotations
 import peewee
 from skirmserv.models import Database
 
+from logging import getLogger
+
 from argon2 import PasswordHasher  # used for password hashing
 from hashlib import sha256  # used for token hashing
 
@@ -34,6 +36,7 @@ class UserModel(peewee.Model):
         """Set Password of this user"""
         ph = PasswordHasher()
         self.password = ph.hash(plaintext_password)
+        getLogger(__name__).debug("User %s set password.", str(self))
 
     def generate_access_token(self) -> str:
         """Generates an access_token, stores a hash of it and returns the
@@ -45,6 +48,8 @@ class UserModel(peewee.Model):
         # Store the sha256 hash of it
         self.access_token = sha256(plaintext_token.encode("ASCII")).hexdigest()
         self.save()
+
+        getLogger(__name__).debug("Generated new access token for user %s.", str(self))
 
         # Return the token
         return plaintext_token
@@ -70,6 +75,7 @@ class UserModel(peewee.Model):
         )
         user.set_password(plaintext_password)
         user.save()
+        getLogger(__name__).debug("Created new usermodel for user %s", str(user))
         return user
 
     @staticmethod
@@ -93,6 +99,9 @@ class UserModel(peewee.Model):
         token_hash = sha256(access_token.encode("ASCII")).hexdigest()
         user = UserModel.get_or_none(UserModel.access_token == token_hash)
         return user
+
+    def __str__(self):
+        return "{0} ({1})".format(self.name, self.id)
 
     class Meta:
         database = Database.get()

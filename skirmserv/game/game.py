@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from skirmserv.models.user import UserModel
 
 import time
+from logging import getLogger
 
 
 class Game(object):
@@ -116,6 +117,9 @@ class Game(object):
             player.client.update()
 
         self.update_spectators()
+        getLogger(__name__).info(
+            "Scheduled game %s starting in %d sec", str(self), delay
+        )
 
         return True
 
@@ -129,11 +133,12 @@ class Game(object):
         del self.teams
         self.players = {}
         self.teams = {}
-        print("DEL??")
 
         for spectator in self.spectators:
             spectator.update()
             spectator.close()
+
+        getLogger(__name__).debug("Closed game %s", str(self))
 
     def get_team_rank(self, team: Team) -> int:
         """Returns the rank of the given team. Returns -1 if the
@@ -198,3 +203,6 @@ class Game(object):
 
         # Return the index of the player
         return player_list.index(player)
+
+    def __str__(self):
+        return self.gid
