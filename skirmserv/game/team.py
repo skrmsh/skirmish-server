@@ -13,16 +13,21 @@ if TYPE_CHECKING:
 
 
 class Team(object):
-    def __init__(self, game: Game, tid: int):
-        self.game = None
+    def __init__(self, game: Game, tid: int, name: str):
+        self.game = game
         self.players = set()
 
         self.tid = tid
+        self.name = name
 
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
         return {
             "t_tid": self.tid,
+            "t_player_count": self.get_player_count(),
+            "t_points": self.get_points(),
+            "t_rank": self.get_rank(),
+            "t_name": self.name,
         }
 
     def get_points(self) -> int:
@@ -43,8 +48,10 @@ class Team(object):
     def join(self, player: Player):
         """Adds a new player to this team"""
         self.players.add(player)
+        player.team = self
 
     def leave(self, player: Player):
         """Removes a player from this team"""
         if player in self.players:
             self.players.remove(player)
+            player.team = None
