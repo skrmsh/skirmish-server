@@ -23,11 +23,11 @@ class Team(object):
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
         return {
-            "t_tid": self.tid,
-            "t_player_count": self.get_player_count(),
-            "t_points": self.get_points(),
-            "t_rank": self.get_rank(),
-            "t_name": self.name,
+            "t_id": self.tid,
+            "t_pc": self.get_player_count(),
+            "t_p": self.get_points(),
+            "t_r": self.get_rank(),
+            "t_n": self.name,
         }
 
     def get_points(self) -> int:

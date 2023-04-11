@@ -62,7 +62,6 @@ class SocketClient(object):
         self.last_sent_pgt_data = {}
         self.game = None
         self.player = None
-        self.team = None
 
     def get_player(self) -> Player:
         """Returns the associated player object"""
@@ -113,15 +112,14 @@ class SocketClient(object):
         # Add fields from player object if available
         if self.player is not None:
             new_pgt.update(self.player.get_pgt_data())
+            # Add fields from team object if available
+            if self.player.team is not None:
+                # TODO: implement team data
+                new_pgt.update(self.player.team.get_pgt_data())
 
         # Add fields from game object if available
         if self.game is not None:
             new_pgt.update(self.game.get_pgt_data())
-
-        # Add fields from team object if available
-        if self.team is not None:
-            # TODO: implement team data
-            new_pgt.update(self.team.get_pgt_data())
 
         # if not full data is requested
         if not full:

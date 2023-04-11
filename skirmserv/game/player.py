@@ -40,24 +40,24 @@ class Player(object):
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
         return {
-            "p_pid": self.pid,
-            "p_name": self.name,
-            "p_health": self.health,
-            "p_points": self.points,
-            "p_color_r": self.color[0],
-            "p_color_g": self.color[1],
-            "p_color_b": self.color[2],
-            "p_color_before_game": self.color_before_game,
-            "p_ammo_limit": self.ammo_limit,
-            "p_ammo": self.ammo,  # todo: set only diff for ammo or
+            "p_id": self.pid,
+            "p_n": self.name,
+            "p_h": self.health,
+            "p_p": self.points,
+            "p_cr": self.color[0],
+            "p_cg": self.color[1],
+            "p_cb": self.color[2],
+            "p_cbg": self.color_before_game,
+            "p_al": self.ammo_limit,
+            "p_a": self.ammo,  # todo: set only diff for ammo or
             # some other solution?
-            "p_phaser_enable": self.phaser_enable,
-            "p_phaser_disable_until": int(self.phaser_disable_until),
-            "p_max_shot_interval": self.max_shot_interval,
-            "p_rank": self.get_rank(),
-            "p_inviolable": self.inviolable,
-            "p_inviolable_until": int(self.inviolable_until),
-            "p_inviolable_lights_off": self.inviolable_lights_off,
+            "p_pe": self.phaser_enable,
+            "p_pdu": int(self.phaser_disable_until),
+            "p_msi": self.max_shot_interval,
+            "p_r": self.get_rank(),
+            "p_i": self.inviolable,
+            "p_iu": int(self.inviolable_until),
+            "p_ilo": self.inviolable_lights_off,
         }
 
     def add_ammo(self, amount: int) -> None:

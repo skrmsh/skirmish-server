@@ -44,12 +44,12 @@ class Game(object):
     def get_pgt_data(self) -> dict:
         """Generates a dict containing all fields in pgt format"""
         return {
-            "g_gid": self.gid,
-            "g_player_count": self.get_player_count(),
-            "g_team_count": self.get_team_count(),
-            "g_start_time": int(self.start_time),
-            "g_created_at": int(self.created_at),
-            "g_created_by": self.created_by.name,
+            "g_id": self.gid,
+            "g_pc": self.get_player_count(),
+            "g_tc": self.get_team_count(),
+            "g_st": int(self.start_time),
+            "g_ca": int(self.created_at),
+            "g_cb": self.created_by.name,
         }
 
     def get_next_pid(self) -> int:
