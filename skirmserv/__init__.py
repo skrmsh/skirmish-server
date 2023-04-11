@@ -10,11 +10,33 @@ from flask_restful import Api
 
 from flask import render_template
 
+from logging.config import dictConfig
+
 # Creating Flask app & SocketIO server
 app = Flask(__name__)
 app.config.from_envvar("SKIRMSERV_CFG")
 socketio = SocketIO(app, cors_allowed_origins="*")  # Socket IO websocket app
 flask_api = Api(app)  # Restful api
+
+# Logger config
+dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s: %(message)s",
+            }
+        },
+        "handlers": {
+            "wsgi": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://flask.logging.wsgi_errors_stream",
+                "formatter": "default",
+            }
+        },
+        "root": {"level": app.config.get("LOGGING_LEVEL"), "handlers": ["wsgi"]},
+    }
+)
 
 # Initialize the Database connection
 with app.app_context():
@@ -39,6 +61,7 @@ flask_api.add_resource(AuthAPI, "/auth")
 flask_api.add_resource(GameAPI, "/game/<string:gid>")
 flask_api.add_resource(GamesAPI, "/games")
 flask_api.add_resource(GamemodeAPI, "/gamemode")
+app.logger.info("Welcome! API + WS up and running.")
 
 
 # Test Route serving SocketIO test client
