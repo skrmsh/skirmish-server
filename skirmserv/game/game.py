@@ -95,6 +95,14 @@ class Game(object):
         self.teams.update({team.tid: team})
         self.update_spectators()
 
+    def remove_team(self, team: Team) -> None:
+        """Removes the given team from this game (and all players from that team)"""
+        for player in team.players:
+            team.leave(player)
+
+        self.teams.pop(team.tid)
+        self.update_spectators()
+
     def move_player_to_team(self, player: Player, team: Team) -> None:
         # Remove player from current team
         if player.team is not None:
