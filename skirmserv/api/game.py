@@ -54,6 +54,30 @@ class GameAPI(Resource):
 
         abort_if_game_is_not_owned(user, game)
 
+        teams = []
+        for team in game.teams.values():
+            teams.append(
+                {
+                    "tid": team.tid,
+                    "player_count": team.get_player_count(),
+                    "points": team.get_points(),
+                    "rank": team.get_rank(),
+                    "name": team.name,
+                }
+            )
+
+        players = []
+        for player in game.player.values():
+            players.append(
+                {
+                    "pid": player.pid,
+                    "name": player.name,
+                    "points": player.points,
+                    "health": player.health,
+                    "rank": player.get_rank(),
+                }
+            )
+
         return {
             "gid": game.gid,
             "start_time": game.start_time,
@@ -62,6 +86,8 @@ class GameAPI(Resource):
             "valid": game.gamemode.is_game_valid(),
             "created_at": game.created_at,
             "created_by": game.created_by.name,
+            "teams": teams,
+            "players": players,
         }, 200
 
     @requires_auth
