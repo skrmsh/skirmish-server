@@ -22,6 +22,7 @@ class Gamemode(object):
         # Fields that have to be set by inheriting classes
         self.player_min = 0
         self.player_max = 255
+        self.teams_managed = False
 
     # Helper methods
     def mark_shot_hit(self, player: Player, sid: int) -> None:
