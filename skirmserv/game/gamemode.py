@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from skirmserv.game.game import Game
     from skirmserv.game.player import Player
+    from skirmserv.game.team import Team
 
 
 class Gamemode(object):
@@ -64,6 +65,16 @@ class Gamemode(object):
     def player_send_shot(self, player: Player, sid: int) -> None:
         """Override this method and handle what should happen when a player
         sends a shot."""
+        pass
+
+    def player_leaving_team(self, player: Player, team: Team):
+        """Override this method and handle what should happen when a player
+        leaves a team."""
+        pass
+
+    def player_joining_team(self, player: Player, team: Team):
+        """Override this method and handle what should happen when a player
+        joines a team."""
         pass
 
     def is_game_valid(self) -> bool:

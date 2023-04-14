@@ -52,13 +52,19 @@ class Team(object):
         self.players.add(player)
         player.team = self
 
+        self.game.gamemode.player_joining_team(player, self)
+        player.client.update()
+
         getLogger(__name__).debug("Joined player %s to team %s", str(player), str(self))
 
     def leave(self, player: Player):
         """Removes a player from this team"""
         if player in self.players:
+            self.game.gamemode.player_leaving_team(player, self)
             self.players.remove(player)
             player.team = None
+
+            player.client.update()
 
             getLogger(__name__).debug(
                 "Removed player %s from team %s", str(player), str(self)
