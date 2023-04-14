@@ -40,6 +40,12 @@ def abort_if_game_is_not_owned(user: UserModel, game: Game):
         abort(403, message="You don't own this game!")
 
 
+def abort_if_gamemode_manages_teams(game: Game):
+    """Aborts if the gamemode of the game manages the teams"""
+    if game.gamemode.teams_managed:
+        abort(403, message="Teams in this game are managed by the gamemode")
+
+
 def get_game_or_abort(gid: str) -> Game | None:
     """Get the specified game by gid or abort the request with 404"""
     game = GameManager.get_game(gid)
@@ -94,6 +100,7 @@ class TeamAPI(Resource):
         # Get game
         game = get_game_or_abort(gid)
         abort_if_game_is_not_owned(user, game)
+        abort_if_gamemode_manages_teams(game)
 
         args = team_create_reqparse.parse_args()
 
@@ -116,6 +123,7 @@ class TeamAPI(Resource):
         # Get game
         game = get_game_or_abort(gid)
         abort_if_game_is_not_owned(user, game)
+        abort_if_gamemode_manages_teams(game)
 
         # Get player
         args = team_move_reqparse.parse_args()
@@ -142,6 +150,7 @@ class TeamAPI(Resource):
         # Get Game
         game = get_game_or_abort(gid)
         abort_if_game_is_not_owned(user, game)
+        abort_if_gamemode_manages_teams(game)
 
         team = get_team_or_abort(tid)
         game.remove_team(team)
