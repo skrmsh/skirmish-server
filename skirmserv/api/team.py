@@ -103,8 +103,13 @@ class TeamAPI(Resource):
         abort_if_gamemode_manages_teams(game)
 
         args = team_create_reqparse.parse_args()
+        name = args.get("name")
 
-        team = Team(game, game.get_next_tid(), args.get("name"))
+        for team in game.teams.values():
+            if team.name == name:
+                return {"message": "There is already a team with this name!"}, 409
+
+        team = Team(game, game.get_next_tid(), name)
 
         return {
             "tid": team.tid,
