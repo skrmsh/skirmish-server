@@ -134,14 +134,14 @@ class TeamAPI(Resource):
             team = get_team_or_abort(game, tid)
             game.move_player_to_team(player, team)
 
-            return {"msg": "Moved player to team"}, 200
+            return {"message": "Moved player to team"}, 200
 
         # Remove player from current team if tid is zero
         else:
             if player.team is not None:
                 player.team.leave(player)
 
-            return {"msg": "Removed player from team"}, 200
+            return {"message": "Removed player from team"}, 200
 
     @requires_auth
     def delete(self, user: UserModel, gid: str, tid: int):
@@ -155,4 +155,4 @@ class TeamAPI(Resource):
         team = get_team_or_abort(tid)
         game.remove_team(team)
 
-        return {}, 200
+        return {}, 204
