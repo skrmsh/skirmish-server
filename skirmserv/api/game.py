@@ -39,7 +39,7 @@ def abort_if_game_is_not_owned(user: UserModel, game: Game):
 def get_game_or_abort(gid: str) -> Game | None:
     game = GameManager.get_game(gid)
     if game is None:
-        abort(404, "Game not found!")
+        abort(404, message="Game not found!")
 
     return game
 
@@ -67,7 +67,7 @@ class GameAPI(Resource):
             )
 
         players = []
-        for player in game.player.values():
+        for player in game.players.values():
             players.append(
                 {
                     "pid": player.pid,

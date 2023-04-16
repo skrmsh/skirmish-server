@@ -60,7 +60,7 @@ from skirmserv.api.gamemode import GamemodeAPI
 flask_api.add_resource(UserAPI, "/user")
 flask_api.add_resource(AuthAPI, "/auth")
 flask_api.add_resource(GameAPI, "/game/<string:gid>")
-flask_api.add_resource(TeamAPI, "/team/<int:tid>")
+flask_api.add_resource(TeamAPI, "/team/<string:gid>/<int:tid>")
 flask_api.add_resource(GamesAPI, "/games")
 flask_api.add_resource(GamemodeAPI, "/gamemode")
 app.logger.info("Welcome! API + WS up and running.")

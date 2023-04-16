@@ -12,9 +12,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from skirmserv.models.user import UserModel
     from skirmserv.game.game import Game
-    from skirmserv.game.team import Team
     from skirmserv.game.player import Player
 
+from skirmserv.game.team import Team
 from skirmserv.game.game_manager import GameManager
 
 from skirmserv.api import requires_auth
@@ -50,7 +50,7 @@ def get_game_or_abort(gid: str) -> Game | None:
     """Get the specified game by gid or abort the request with 404"""
     game = GameManager.get_game(gid)
     if game is None:
-        abort(404, "Game not found!")
+        abort(404, message="Game not found!")
 
     return game
 
@@ -59,7 +59,7 @@ def get_team_or_abort(game: Game, tid: int) -> Team | None:
     """Get the specified team or abort the request with 404"""
     team = game.teams.get(tid, None)
     if team is None:
-        abort(404, "Team not found!")
+        abort(404, message="Team not found!")
 
     return team
 
@@ -68,7 +68,7 @@ def get_player_or_abort(game: Game, pid: int) -> Player | None:
     """Get the specified player or abort the request with 404"""
     player = game.players.get(pid, None)
     if player is None:
-        abort(404, "Player not found!")
+        abort(404, message="Player not found!")
 
     return player
 
@@ -110,6 +110,7 @@ class TeamAPI(Resource):
                 return {"message": "There is already a team with this name!"}, 409
 
         team = Team(game, game.get_next_tid(), name)
+        game.add_team(team)
 
         return {
             "tid": team.tid,
@@ -157,7 +158,7 @@ class TeamAPI(Resource):
         abort_if_game_is_not_owned(user, game)
         abort_if_gamemode_manages_teams(game)
 
-        team = get_team_or_abort(tid)
+        team = get_team_or_abort(game, tid)
         game.remove_team(team)
 
         return {}, 204

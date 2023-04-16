@@ -97,7 +97,8 @@ class Game(object):
 
     def remove_team(self, team: Team) -> None:
         """Removes the given team from this game (and all players from that team)"""
-        for player in team.players:
+        players = list(team.players.values())
+        for player in players:
             team.leave(player)
 
         self.teams.pop(team.tid)
