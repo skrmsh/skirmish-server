@@ -17,7 +17,7 @@ from logging import getLogger
 class Team(object):
     def __init__(self, game: Game, tid: int, name: str):
         self.game = game
-        self.players = set()
+        self.players = {}
 
         self.tid = tid
         self.name = name
@@ -35,7 +35,7 @@ class Team(object):
     def get_points(self) -> int:
         """Returns the sum of points from every player"""
         result = 0
-        for player in self.players:
+        for player in self.players.values():
             result += player.points
         return result
 
@@ -49,16 +49,22 @@ class Team(object):
 
     def join(self, player: Player):
         """Adds a new player to this team"""
-        self.players.add(player)
+        self.players.update({player.pid: player})
         player.team = self
+
+        self.game.gamemode.player_joining_team(player, self)
+        player.client.update()
 
         getLogger(__name__).debug("Joined player %s to team %s", str(player), str(self))
 
     def leave(self, player: Player):
         """Removes a player from this team"""
-        if player in self.players:
-            self.players.remove(player)
+        if player.pid in self.players:
+            self.game.gamemode.player_leaving_team(player, self)
+            self.players.pop(player.pid)
             player.team = None
+
+            player.client.update()
 
             getLogger(__name__).debug(
                 "Removed player %s from team %s", str(player), str(self)

@@ -26,6 +26,7 @@ class Zombie(Gamemode):
         super().__init__(game)
 
         self.player_min = 2
+        self.teams_managed = True
 
         self.team_zombie = Team(self.game, self.game.get_next_tid(), "Zombie")
         self.game.add_team(self.team_zombie)
