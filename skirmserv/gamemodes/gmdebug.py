@@ -70,3 +70,18 @@ class GMDebug(Gamemode):
     def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
         player.points += 500
         player.client.current_actions.add(player.client.ACTION_SHOT_HIT)
+
+    def hitpoint_init(self, mode) -> tuple | None:
+        if mode == 0:
+            return (0, 255, 0)
+        if mode == 1:
+            return (255, 0, 0)
+
+    def hitpoint_got_hit(self, mode: int, player: Player, sid: int) -> int:
+        if self.has_shot_hit(player, sid):
+            return
+
+        self.mark_shot_hit(player, sid)
+
+        player.points += 1000
+        return 5

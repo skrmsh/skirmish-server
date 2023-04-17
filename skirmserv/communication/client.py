@@ -39,6 +39,11 @@ class SocketClient(object):
     ACTION_FULL_DATA_UPDATE = 12
     ACTION_SERVER_JOIN_DENIED = 13
     ACTION_INVALID_GAME = 14
+    ACTION_POWER_OFF = 15
+    ACTION_HW_STATUS = 16
+    ACTION_HP_INIT = 17
+    ACTION_HP_GOT_HIT = 18
+    ACTION_HP_HIT_VALID = 19
 
     def __init__(self, socket_id: str, user: UserModel, socketio: SocketIO):
         self.socket_id = socket_id
@@ -190,6 +195,8 @@ class SocketClient(object):
                 self._on_send_shot(data)
             elif action == SocketClient.ACTION_FULL_DATA_UPDATE:
                 self.update(full=True)
+            elif action == SocketClient.ACTION_HP_GOT_HIT:
+                self._on_hp_got_hit(data)
 
         getLogger(__name__).debug(
             "Client %s received data: %s", str(self), json.dumps(data)
@@ -250,6 +257,29 @@ class SocketClient(object):
 
             # Trigger send_shot method from associated player
             self.player.send_shot(sid)
+
+    def _on_hp_got_hit(self, data):
+        """Hitpoint got hit event triggered by client"""
+        mode = data.get("hpmode", None)
+        pid = data.get("pid", None)
+        sid = data.get("sid", None)
+        if mode is None or pid is None or sid is None:
+            return
+
+        player = self.game.get_player_by_pid(pid)
+        if player is None:
+            return
+
+        cooldown = self.game.gamemode.hitpoint_got_hit(mode, player, sid)
+        if cooldown is not None:
+            self.trigger_action(
+                SocketClient.ACTION_HP_HIT_VALID,
+                hpmode=mode,
+                pid=pid,
+                sid=sid,
+                cooldown=cooldown,
+            )
+            self.update()
 
     def close(self):
         """Called when the websocket connection was closed"""

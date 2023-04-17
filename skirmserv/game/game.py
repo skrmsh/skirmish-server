@@ -118,10 +118,25 @@ class Game(object):
 
         self.start_time = time.time() + delay
 
+        hp_init_values = {}
+        for hpmode in range(0, 8):
+            c = self.gamemode.hitpoint_init(hpmode)
+            if c is not None:
+                hp_init_values.update({hpmode: c})
+
         for player in self.players.values():
             # Let the gamemode handle things that happen on game start
             self.gamemode.player_game_start(player)
 
+            for hpmode in hp_init_values:
+                player.client.trigger_action(
+                    player.client.ACTION_HP_INIT,
+                    hpmode=hpmode,
+                    color_r=hp_init_values[hpmode][0],
+                    color_g=hp_init_values[hpmode][1],
+                    color_b=hp_init_values[hpmode][2],
+                )
+                player.client.update()
             # Inform the player about updates
             player.client.update()
 
