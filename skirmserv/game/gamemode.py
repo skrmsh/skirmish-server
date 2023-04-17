@@ -77,6 +77,17 @@ class Gamemode(object):
         joines a team."""
         pass
 
+    def hitpoint_init(self, mode) -> tuple | None:
+        """Override this method to init a hitpoint (will be called for mode 0 - 8).
+        Return a color for the inited hitpoint or none if this mode is not
+        required for the game"""
+        pass
+
+    def hitpoint_got_hit(self, mode: int, player: Player, sid: int) -> bool:
+        """Override this method to handle what should happen when a player has
+        hit a hitpoint. Return true if this hit was a valid hit."""
+        return False
+
     def is_game_valid(self) -> bool:
         """Returns if the game assigned to this gamemode is valid
         and may be started."""
