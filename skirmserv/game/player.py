@@ -105,11 +105,13 @@ class Player(object):
             return
 
         # Let the gamemode handle this event
-        self.game.gamemode.player_got_hit(self, opponent, sid)
+        # but first check if this shot has never hit before
+        if not self.game.gamemode.is_first_hit(self, sid):
+            self.game.gamemode.player_got_hit(self, opponent, sid)
 
-        # Also let the gamemode handle the event that the
-        # other player has hit
-        self.game.gamemode.player_has_hit(opponent, self, sid)
+            # Also let the gamemode handle the event that the
+            # other player has hit
+            self.game.gamemode.player_has_hit(opponent, self, sid)
 
         # inform both clients about updates
         self.client.update()
