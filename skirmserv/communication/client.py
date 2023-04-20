@@ -165,8 +165,9 @@ class SocketClient(object):
         self.current_actions.clear()
         self.current_data.clear()
 
-        # Send data to the socket
-        self.send(data)
+        # Send data to the socket (but only if its not empty data)
+        if data != {"a": []}:
+            self.send(data)
 
         getLogger(__name__).debug("Updated data for client %s", str(self))
 

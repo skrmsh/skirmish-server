@@ -36,6 +36,12 @@ class Gamemode(object):
         psid = sid << 8 | player.pid  # Combined player / shot id
         return psid in self._already_hit
 
+    def is_first_hit(self, player: Player, sid: int) -> bool:
+        """Checks if the shot has hit someone before. Marks the shot as hit!"""
+        result = self.has_shot_hit(player, sid)
+        self.mark_shot_hit(player, sid)
+        return result
+
     # Events to override
     def player_joined(self, player: Player) -> None:
         """Override this method and handle what should happen when a player

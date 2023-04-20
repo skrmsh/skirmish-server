@@ -68,12 +68,6 @@ class Deathmatch(Gamemode):
         player.phaser_disable_until = self.game.start_time
 
     def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
-        # Check if this sid has already hit another player
-        if self.has_shot_hit(player, sid):
-            return
-
-        self.mark_shot_hit(player, sid)
-
         # If the player will survive this shot
         if player.health > 10:
             player.health -= 10

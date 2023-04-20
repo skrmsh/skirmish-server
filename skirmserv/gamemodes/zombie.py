@@ -69,12 +69,6 @@ class Zombie(Gamemode):
         print(player.color)
 
     def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
-        # Check if this sid has already hit another player
-        if self.has_shot_hit(player, sid):
-            return
-
-        self.mark_shot_hit(player, sid)
-
         if player.team == self.team_alive and opponent.team == self.team_zombie:
             player.color = [0, 255, 0]
             player.health = 0

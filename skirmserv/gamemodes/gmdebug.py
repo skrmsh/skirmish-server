@@ -56,12 +56,6 @@ class GMDebug(Gamemode):
         player.phaser_disable_until = self.game.start_time
 
     def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
-        # Check if this sid has already hit another player
-        if self.has_shot_hit(player, sid):
-            return
-
-        self.mark_shot_hit(player, sid)
-
         player.phaser_disable_until = time.time() + self._inviolable_time
         player.inviolable_until = player.phaser_disable_until
 
