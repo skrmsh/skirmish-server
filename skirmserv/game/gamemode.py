@@ -17,30 +17,10 @@ class Gamemode(object):
     def __init__(self, game: Game):
         self.game = game
 
-        # Set for already hit shots
-        self._already_hit = set()
-
         # Fields that have to be set by inheriting classes
         self.player_min = 0
         self.player_max = 255
         self.teams_managed = False
-
-    # Helper methods
-    def mark_shot_hit(self, player: Player, sid: int) -> None:
-        """Marks that the given shot has hit someone"""
-        psid = sid << 8 | player.pid  # Combined player / shot id
-        self._already_hit.add(psid)
-
-    def has_shot_hit(self, player: Player, sid: int) -> bool:
-        """Returns if the given shot has already hit someone"""
-        psid = sid << 8 | player.pid  # Combined player / shot id
-        return psid in self._already_hit
-
-    def is_first_hit(self, player: Player, sid: int) -> bool:
-        """Checks if the shot has hit someone before. Marks the shot as hit!"""
-        result = self.has_shot_hit(player, sid)
-        self.mark_shot_hit(player, sid)
-        return result
 
     # Events to override
     def player_joined(self, player: Player) -> None:

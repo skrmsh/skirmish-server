@@ -106,7 +106,7 @@ class Player(object):
 
         # Let the gamemode handle this event
         # but first check if this shot has never hit before
-        if not self.game.gamemode.is_first_hit(self, sid):
+        if not self.game.is_first_hit(self, sid):
             self.game.gamemode.player_got_hit(self, opponent, sid)
 
             # Also let the gamemode handle the event that the

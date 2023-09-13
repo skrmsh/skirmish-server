@@ -35,6 +35,9 @@ class Game(object):
         # Spectators spectating this game
         self.spectators = set()
 
+        # Shots
+        self._already_hit_shots = set()
+
         self.gamemode = gamemode(self)  # Creates a new instance of the gamemode
 
     def update_spectators(self) -> None:
@@ -227,6 +230,14 @@ class Game(object):
 
         # Return the index of the player
         return player_list.index(player)
+
+    def is_first_hit(self, player: Player, sid: int) -> bool:
+        """Checks if the shot by the player has hit the first time
+        or is already marked as hit."""
+        psid = sid << 8 | player.pid  # Combined player / shot id
+        result = psid in self._already_hit_shots
+        self._already_hit_shots.add(psid)
+        return result
 
     def __str__(self):
         return self.gid
