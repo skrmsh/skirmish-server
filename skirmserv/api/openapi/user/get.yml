@@ -1,0 +1,14 @@
+tags:
+  - user
+security:
+  - accessToken: []
+responses:
+  200:
+    description: Data about the authenticated user.
+    schema:
+      id: UserInfo
+      properties:
+        username:
+          type: string
+        email:
+          type: string

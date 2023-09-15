@@ -1,0 +1,27 @@
+tags:
+  - user
+consumes:
+  - application/json
+parameters:
+  - name: email
+    in: body
+    required: true
+    description: E-Mail address
+    type: string
+  - name: password
+    in: body
+    required: true
+    description: Password
+    type: string
+responses:
+  401:
+    description: Invalid credentials
+  200:
+    description: The user was registered and authenticated
+    schema:
+      id: AuthInfo
+      properties:
+        message:
+          type: string
+        access_token:
+          type: string

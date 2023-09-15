@@ -1,0 +1,58 @@
+tags:
+  - game
+security:
+  - accessToken: []
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: The ID of the game.
+    type: string
+responses:
+  200:
+    description: Data about the game
+    schema:
+      id: Game
+      properties:
+        gid:
+          type: string
+        start_time:
+          type: number
+        player_count:
+          type: integer
+        team_count:
+          type: integer
+        valid:
+          type: bool
+        created_at:
+          type: number
+        teams:
+          type: array
+          items:
+            type: object
+            properties:
+              tid:
+                type: integer
+              player_count:
+                type: integer
+              points:
+                type: integer
+              rank:
+                type: integer
+              name:
+                type: string
+        players:
+          type: array
+          items:
+            type: object
+            properties:
+              pid:
+                type: integer
+              name:
+                type: string
+              points:
+                type: integer
+              health:
+                type: integer
+              rank:
+                type: integer

@@ -1,0 +1,20 @@
+tags:
+  - game
+security:
+  - accessToken: []
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: Game to start
+    type: string
+  - name: delay
+    in: query
+    required: true
+    description: Seconds until the game should start
+    type: number
+responses:
+  204:
+    description: Game was started.
+  409:
+    description: The game is not ready to be started.

@@ -19,6 +19,8 @@ from flask_restful import abort
 from skirmserv.game.game_manager import GameManager
 from skirmserv.api import requires_auth
 
+from flasgger import swag_from
+
 game_create_reqparse = reqparse.RequestParser()
 game_create_reqparse.add_argument(
     "gamemode", type=str, help="Gamemode field is required!", required=True
@@ -46,8 +48,11 @@ def get_game_or_abort(gid: str) -> Game | None:
 
 class GameAPI(Resource):
     @requires_auth
+    @swag_from("openapi/game/get.yml")
     def get(self, user: UserModel, gid: str):
-        """Returns information about the requested game"""
+        """
+        Returns information about the requested game
+        """
 
         # Get game by gid
         game = get_game_or_abort(gid)
@@ -91,6 +96,7 @@ class GameAPI(Resource):
         }, 200
 
     @requires_auth
+    @swag_from("openapi/game/post.yml")
     def post(self, gid: str, user: UserModel):
         """Creates a new game, ignores the gid parameter"""
         args = game_create_reqparse.parse_args()
@@ -100,6 +106,7 @@ class GameAPI(Resource):
         return {"gid": gid}, 201
 
     @requires_auth
+    @swag_from("openapi/game/put.yml")
     def put(self, gid: str, user: UserModel):
         """Starts the game in "delay" seconds"""
         args = game_start_reqparser.parse_args()
@@ -114,6 +121,7 @@ class GameAPI(Resource):
             abort(409, message="The game is currently not valid to start")
 
     @requires_auth
+    @swag_from("openapi/game/delete.yml")
     def delete(self, gid: str, user: UserModel):
         """Deletes the game"""
 
