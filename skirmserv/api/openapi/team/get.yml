@@ -1,0 +1,33 @@
+tags:
+  - team
+security:
+  - AccessTokenHeader: []
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: The ID of the game.
+    type: string
+  - name: tid
+    in: path
+    required: true
+    description: The ID of the team.
+    type: integer
+responses:
+  200:
+    description: Data about the team
+    schema:
+      id: Team
+      properties:
+        tid:
+          type: integer
+        game:
+          type: string
+        player_count:
+          type: integer
+        points:
+          type: integer
+        rank:
+          type: integer
+        name:
+          type: string

@@ -14,6 +14,8 @@ from flask import request
 from flask_socketio import SocketIO  # Just for typing
 import json
 
+import time
+
 from logging import getLogger
 
 from skirmserv.game.player import Player
@@ -50,6 +52,8 @@ class SocketClient(object):
         self.user = user
         self.socketio = socketio
 
+        self.connection_closed = 0
+
         self.current_actions = set()
         self.current_data = {}
 
@@ -64,11 +68,16 @@ class SocketClient(object):
 
     def reset(self) -> None:
         """Resets this client to initial state"""
+
+        if self.game is not None:
+            self._on_leave_game(None)
+
         self.current_actions = set()
         self.current_data = {}
         self.last_sent_pgt_data = {}
         self.game = None
         self.player = None
+        self.connection_closed = 0
 
         getLogger(__name__).debug("Client %s resetted", str(self))
 
@@ -284,7 +293,7 @@ class SocketClient(object):
 
     def close(self):
         """Called when the websocket connection was closed"""
-        self._on_leave_game(None)
+        self.connection_closed = time.time()
         getLogger(__name__).debug("Client %s closed", str(self))
 
     def __str__(self):

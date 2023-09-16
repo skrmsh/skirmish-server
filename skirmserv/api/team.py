@@ -23,6 +23,8 @@ from flask_restful import Resource
 from flask_restful import abort
 from flask_restful import reqparse
 
+from flasgger import swag_from
+
 team_create_reqparse = reqparse.RequestParser()
 team_create_reqparse.add_argument(
     "name", type=str, help="Team name field is required!", required=True
@@ -75,6 +77,7 @@ def get_player_or_abort(game: Game, pid: int) -> Player | None:
 
 class TeamAPI(Resource):
     @requires_auth
+    @swag_from("openapi/team/get.yml")
     def get(self, user: UserModel, gid: str, tid: int):
         """Returns information about the requested team"""
 
@@ -94,6 +97,7 @@ class TeamAPI(Resource):
         }, 200
 
     @requires_auth
+    @swag_from("openapi/team/post.yml")
     def post(self, user: UserModel, gid: str, tid: int):
         """Creates a new team"""
 
@@ -122,6 +126,7 @@ class TeamAPI(Resource):
         }, 200
 
     @requires_auth
+    @swag_from("openapi/team/put.yml")
     def put(self, user: UserModel, gid: str, tid: int):
         """Moves a player to the specified team |
         Removes a player from all teams if the tid is 0"""
@@ -150,6 +155,7 @@ class TeamAPI(Resource):
             return {"message": "Removed player from team"}, 200
 
     @requires_auth
+    @swag_from("openapi/team/delete.yml")
     def delete(self, user: UserModel, gid: str, tid: int):
         """Removes all players from the team and deletes the team"""
 

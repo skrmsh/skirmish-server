@@ -1,0 +1,31 @@
+tags:
+  - game
+security:
+  - AccessTokenHeader: []
+consumes:
+  - application/json
+parameters:
+  - name: gid
+    in: path
+    required: false
+    description: Ignored parameter
+    type: string
+  - name: body
+    in: body
+    required: true
+    type: object
+    schema:
+      type: object
+      properties:
+        gamemode:
+          type: string
+      required:
+        - gamemode
+responses:
+  201:
+    description: Game was created.
+    schema:
+      id: gid
+      properties:
+        gid:
+          type: string

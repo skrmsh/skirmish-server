@@ -1,0 +1,26 @@
+tags:
+  - game
+security:
+  - AccessTokenHeader: []
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: Game to start
+    type: string
+  - name: body
+    in: body
+    required: true
+    type: object
+    schema:
+      type: object
+      properties:
+        delay:
+          type: integer
+      required:
+        - delay
+responses:
+  204:
+    description: Game was started.
+  409:
+    description: The game is not ready to be started.

@@ -1,0 +1,35 @@
+tags:
+  - team
+security:
+  - AccessTokenHeader: []
+consumes:
+  - application/json
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: The ID of the game.
+    type: string
+  - name: tid
+    in: path
+    required: true
+    description: The ID of the team.
+    type: integer
+  - name: body
+    in: body
+    required: true
+    type: object
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+responses:
+  409:
+    description: Team name is in use.
+  200:
+    description: Team was created
+    schema:
+      $ref: "#/definitions/Team"

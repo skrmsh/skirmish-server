@@ -14,6 +14,7 @@ from flask import request
 from flask import current_app
 from flask_socketio import SocketIO
 
+import time
 import json
 from logging import getLogger
 
@@ -102,10 +103,22 @@ class ClientManager(object):
         # Replace if there is a old connection and return the client object
         if old_socket_id is not None:
             old_client = self.clients[old_socket_id]
-            old_client.reset()
+            # if the last disconnect event was more than 10 minutes ago
+            # the client will be reset
+            if (
+                old_client.connection_closed > 0
+                and time.time() - old_client.connection_closed > 600
+            ):
+                old_client.reset()
+            old_client.connection_closed = 0
             old_client.socket_id = socket_id
             self.clients.pop(old_socket_id)
             self.clients.update({socket_id: old_client})
+
+            # Sending full data to the client if currently ingame
+            if old_client.game is not None:
+                old_client.trigger_action(SocketClient.ACTION_FULL_DATA_UPDATE)
+
             getLogger(__name__).info("Re-Joined client: %s", str(old_client))
 
             return old_client

@@ -12,11 +12,25 @@ from flask import render_template
 
 from logging.config import dictConfig
 
+from flasgger import Swagger, swag_from
+
 # Creating Flask app & SocketIO server
 app = Flask(__name__)
 app.config.from_envvar("SKIRMSERV_CFG")
 socketio = SocketIO(app, cors_allowed_origins="*")  # Socket IO websocket app
 flask_api = Api(app)  # Restful api
+
+SWAGGER_TEMPLATE = {
+    "securityDefinitions": {
+        "AccessTokenHeader": {
+            "type": "apiKey",
+            "name": "x-access-token",
+            "in": "header",
+        }
+    }
+}
+
+swag = Swagger(app, template=SWAGGER_TEMPLATE)
 
 # Logger config
 dictConfig(

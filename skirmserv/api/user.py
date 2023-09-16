@@ -11,6 +11,8 @@ from flask_restful import abort
 from skirmserv.models.user import UserModel
 from skirmserv.api import requires_auth
 
+from flasgger import swag_from
+
 from logging import getLogger
 
 # Request argument parser for user registration.
@@ -28,10 +30,12 @@ user_register_reqparse.add_argument(
 
 class UserAPI(Resource):
     @requires_auth
+    @swag_from("openapi/user/get.yml")
     def get(self, user: UserModel):
         """Returns base information about the user"""
         return {"username": user.name, "email": user.email}
 
+    @swag_from("openapi/user/post.yml")
     def post(self):
         """Registers a new user.
         Todo: Figure out if its a good idea to do this
@@ -54,6 +58,7 @@ class UserAPI(Resource):
         return {"message": "user_created", "access_token": access_token}, 201
 
     @requires_auth
+    @swag_from("openapi/user/delete.yml")
     def delete(self, user: UserModel):
         """Delete an authenticated user profile"""
         getLogger(__name__).info("Delted user %s via API", str(user))
@@ -72,6 +77,7 @@ user_login_reqparse.add_argument(
 
 
 class AuthAPI(Resource):
+    @swag_from("openapi/user/auth_post.yml")
     def post(self):
         """
         Creates a new access token for the user authenticated by email and
