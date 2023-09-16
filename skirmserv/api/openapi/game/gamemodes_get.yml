@@ -1,0 +1,12 @@
+tags:
+  - game
+responses:
+  200:
+    description: Get all available gamemodes
+    schema:
+      id: GamemodeList
+      properties:
+        gamemodes:
+          type: array
+          items:
+            type: string

@@ -3,16 +3,20 @@ tags:
 consumes:
   - application/json
 parameters:
-  - name: email
+  - name: body
     in: body
+    type: object
     required: true
-    description: E-Mail address
-    type: string
-  - name: password
-    in: body
-    required: true
-    description: Password
-    type: string
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
 responses:
   401:
     description: Invalid credentials

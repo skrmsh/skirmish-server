@@ -1,18 +1,24 @@
 tags:
   - game
 security:
-  - accessToken: []
+  - AccessTokenHeader: []
 parameters:
   - name: gid
     in: path
     required: true
     description: Game to start
     type: string
-  - name: delay
-    in: query
+  - name: body
+    in: body
     required: true
-    description: Seconds until the game should start
-    type: number
+    type: object
+    schema:
+      type: object
+      properties:
+        delay:
+          type: integer
+      required:
+        - delay
 responses:
   204:
     description: Game was started.

@@ -1,7 +1,7 @@
 tags:
   - user
 security:
-  - accessToken: []
+  - AccessTokenHeader: []
 responses:
   200:
     description: Data about the authenticated user.

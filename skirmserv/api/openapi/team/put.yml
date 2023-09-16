@@ -1,5 +1,5 @@
 tags:
-  - game
+  - team
 security:
   - AccessTokenHeader: []
 consumes:
@@ -7,9 +7,14 @@ consumes:
 parameters:
   - name: gid
     in: path
-    required: false
-    description: Ignored parameter
+    required: true
+    description: The ID of the game.
     type: string
+  - name: tid
+    in: path
+    required: true
+    description: The ID of the team.
+    type: integer
   - name: body
     in: body
     required: true
@@ -17,15 +22,15 @@ parameters:
     schema:
       type: object
       properties:
-        gamemode:
-          type: string
+        pid:
+          type: integer
       required:
-        - gamemode
+        - pid
 responses:
-  201:
-    description: Game was created.
+  200:
+    description: Player re/moved from/to team
     schema:
-      id: gid
+      id: PlayerMoved
       properties:
-        gid:
+        message:
           type: string

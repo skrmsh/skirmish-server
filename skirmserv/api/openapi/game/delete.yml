@@ -1,7 +1,7 @@
 tags:
   - game
 security:
-  - accessToken: []
+  - AccessTokenHeader: []
 parameters:
   - name: gid
     in: path

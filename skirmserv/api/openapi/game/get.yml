@@ -1,7 +1,7 @@
 tags:
   - game
 security:
-  - accessToken: []
+  - AccessTokenHeader: []
 parameters:
   - name: gid
     in: path
@@ -23,9 +23,11 @@ responses:
         team_count:
           type: integer
         valid:
-          type: bool
+          type: boolean
         created_at:
           type: number
+        created_by:
+          type: string
         teams:
           type: array
           items:

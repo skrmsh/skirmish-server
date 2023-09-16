@@ -58,6 +58,7 @@ class UserAPI(Resource):
         return {"message": "user_created", "access_token": access_token}, 201
 
     @requires_auth
+    @swag_from("openapi/user/delete.yml")
     def delete(self, user: UserModel):
         """Delete an authenticated user profile"""
         getLogger(__name__).info("Delted user %s via API", str(user))

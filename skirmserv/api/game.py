@@ -134,6 +134,7 @@ class GameAPI(Resource):
 
 
 class GamesAPI(Resource):
+    @swag_from("openapi/game/games_get.yml")
     def get(self):
         """Get all currently running games"""
 
