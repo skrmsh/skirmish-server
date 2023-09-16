@@ -118,6 +118,7 @@ class ClientManager(object):
             # Sending full data to the client if currently ingame
             if old_client.game is not None:
                 old_client.trigger_action(SocketClient.ACTION_FULL_DATA_UPDATE)
+                old_client.update(full=True)
 
             getLogger(__name__).info("Re-Joined client: %s", str(old_client))
 
