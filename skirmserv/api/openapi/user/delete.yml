@@ -1,0 +1,7 @@
+tags:
+  - user
+security:
+  - AccessTokenHeader: []
+responses:
+  204:
+    description: The user was deleted

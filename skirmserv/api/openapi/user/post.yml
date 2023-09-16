@@ -1,0 +1,30 @@
+tags:
+  - user
+parameters:
+  - name: name
+    in: body
+    required: true
+    description: Username
+    type: string
+  - name: email
+    in: body
+    required: true
+    description: E-Mail address
+    type: string
+  - name: password
+    in: body
+    required: true
+    description: Password
+    type: string
+responses:
+  409:
+    description: The E-Mail address is already in use.
+  201:
+    description: The user was registered and authenticated
+    schema:
+      id: RegistrationInfo
+      properties:
+        message:
+          type: string
+        access_token:
+          type: string

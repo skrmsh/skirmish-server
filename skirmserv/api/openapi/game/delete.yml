@@ -1,0 +1,13 @@
+tags:
+  - game
+security:
+  - AccessTokenHeader: []
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: Game to delete
+    type: string
+responses:
+  204:
+    description: Game was deleted.

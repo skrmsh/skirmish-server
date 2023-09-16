@@ -1,0 +1,36 @@
+tags:
+  - team
+security:
+  - AccessTokenHeader: []
+consumes:
+  - application/json
+parameters:
+  - name: gid
+    in: path
+    required: true
+    description: The ID of the game.
+    type: string
+  - name: tid
+    in: path
+    required: true
+    description: The ID of the team.
+    type: integer
+  - name: body
+    in: body
+    required: true
+    type: object
+    schema:
+      type: object
+      properties:
+        pid:
+          type: integer
+      required:
+        - pid
+responses:
+  200:
+    description: Player re/moved from/to team
+    schema:
+      id: PlayerMoved
+      properties:
+        message:
+          type: string
