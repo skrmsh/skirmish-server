@@ -153,6 +153,7 @@ class GameManager(object):
         client.update()
 
         # Clear game and player object from client
+        client.game = None  # prevent the client to leave the game again
         client.reset()
 
         getLogger(__name__).info(
@@ -169,10 +170,11 @@ class GameManager(object):
         # Get game by gid
         game = self._get_game(gid)
 
-        # Close the game
-        game.close()
+        if game is not None:
+            # Close the game
+            game.close()
 
-        getLogger(__name__).info("Closed game %s", str(game))
+            getLogger(__name__).info("Closed game %s", str(game))
 
-        self.games.pop(game.gid)
-        del game
+            self.games.pop(game.gid)
+            del game
