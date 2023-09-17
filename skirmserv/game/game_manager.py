@@ -153,9 +153,7 @@ class GameManager(object):
         client.update()
 
         # Clear game and player object from client
-        client.clear_player()
-        client.clear_game()
-        # Todo: Do this for teams too
+        client.reset()
 
         getLogger(__name__).info(
             "Removed player %s from game %s", str(player), str(game)
