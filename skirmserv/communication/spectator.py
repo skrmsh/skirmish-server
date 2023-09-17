@@ -20,6 +20,8 @@ class Spectator(object):
 
         self.game.spectators.add(self)
 
+        self.update()
+
     def close(self):
         """
         Removes the instance from the games list of spectators
