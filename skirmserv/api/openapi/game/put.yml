@@ -11,9 +11,7 @@ parameters:
   - name: body
     in: body
     required: true
-    type: object
     schema:
-      type: object
       properties:
         delay:
           type: integer

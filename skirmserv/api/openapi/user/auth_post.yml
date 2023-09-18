@@ -5,10 +5,8 @@ consumes:
 parameters:
   - name: body
     in: body
-    type: object
     required: true
     schema:
-      type: object
       properties:
         email:
           type: string

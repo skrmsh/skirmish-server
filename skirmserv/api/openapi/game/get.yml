@@ -31,7 +31,6 @@ responses:
         teams:
           type: array
           items:
-            type: object
             properties:
               tid:
                 type: integer
@@ -46,7 +45,6 @@ responses:
         players:
           type: array
           items:
-            type: object
             properties:
               pid:
                 type: integer

@@ -7,15 +7,13 @@ consumes:
 parameters:
   - name: gid
     in: path
-    required: false
+    required: true
     description: Ignored parameter
-    type: string
+    type: integer
   - name: body
     in: body
     required: true
-    type: object
     schema:
-      type: object
       properties:
         gamemode:
           type: string
