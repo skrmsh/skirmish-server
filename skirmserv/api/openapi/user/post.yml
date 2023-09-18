@@ -1,21 +1,23 @@
 tags:
   - user
 parameters:
-  - name: name
-    in: body
+  - name: UserInfo
     required: true
-    description: Username
-    type: string
-  - name: email
+    description: information for the new user
     in: body
-    required: true
-    description: E-Mail address
-    type: string
-  - name: password
-    in: body
-    required: true
-    description: Password
-    type: string
+    schema:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
 responses:
   409:
     description: The E-Mail address is already in use.

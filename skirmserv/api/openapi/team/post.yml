@@ -18,9 +18,7 @@ parameters:
   - name: body
     in: body
     required: true
-    type: object
     schema:
-      type: object
       properties:
         name:
           type: string
@@ -32,4 +30,17 @@ responses:
   200:
     description: Team was created
     schema:
-      $ref: "#/definitions/Team"
+      id: Team
+      properties:
+        tid:
+          type: integer
+        game:
+          type: string
+        player_count:
+          type: integer
+        points:
+          type: integer
+        rank:
+          type: integer
+        name:
+          type: string

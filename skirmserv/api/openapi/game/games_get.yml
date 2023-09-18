@@ -9,7 +9,6 @@ responses:
         games:
           type: array
           items:
-            type: object
             properties:
               gid:
                 type: string
