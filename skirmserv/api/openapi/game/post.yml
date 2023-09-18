@@ -9,7 +9,7 @@ parameters:
     in: path
     required: true
     description: Ignored parameter
-    type: integer
+    type: string
   - name: body
     in: body
     required: true
