@@ -24,10 +24,13 @@ jobs:
           tags: skirmish-server:validate-openapi
 
       - name: Start the container
-        run: docker run -d -p 8080:8081 skirmish-server:validate-openapi
+        run: docker run -d -p 8080:8081 --name tempcontainer skirmish-server:validate-openapi
 
       - name: Wait for the container to Start
         run: sleep 20
+
+      - name: Show logs of container
+        run: docker logs tempcontainer
 
       - name: Download the openapi spec
         run: wget http://localhost:8080/apispec_1.json -O apispec_1.json
