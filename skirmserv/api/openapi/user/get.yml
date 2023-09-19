@@ -7,6 +7,9 @@ responses:
     description: Data about the authenticated user.
     schema:
       id: UserInfo
+      required:
+        - username
+        - email
       properties:
         username:
           type: string
