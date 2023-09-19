@@ -9,6 +9,6 @@ responses:
       - gamemodes
       properties:
         gamemodes:
-          type: array            
+          type: array 
           items:
             type: string
