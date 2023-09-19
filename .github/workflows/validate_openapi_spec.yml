@@ -5,7 +5,7 @@ on:
   pull_request:
     branches:
       - main
-      
+
 jobs:
   test-openapi-spec:
     runs-on: ubuntu-latest
@@ -20,6 +20,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          load: true
           tags: skirmish-server:validate-openapi
 
       - name: Start the container
