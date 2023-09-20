@@ -1,0 +1,45 @@
+name: Skirmish Server openapi spec validation
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-openapi-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+     
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: skirmish-server:validate-openapi
+
+      - name: Start the container
+        run: docker run -d -p 8080:8081 --name tempcontainer skirmish-server:validate-openapi
+
+      - name: Wait for the container to Start
+        run: sleep 20
+
+      - name: Show logs of container
+        run: docker logs tempcontainer
+
+      - name: Download the openapi spec
+        run: wget http://localhost:8080/apispec_1.json -O apispec_1.json
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+      - name: Install openapi-spec-validator
+        run: pip install --no-cache-dir openapi-spec-validator
+
+      - name: Validate the spec
+        run: openapi-spec-validator apispec_1.json

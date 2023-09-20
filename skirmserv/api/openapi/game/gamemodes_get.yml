@@ -5,8 +5,10 @@ responses:
     description: Get all available gamemodes
     schema:
       id: GamemodeList
+      required:
+      - gamemodes
       properties:
         gamemodes:
-          type: array
+          type: array 
           items:
             type: string

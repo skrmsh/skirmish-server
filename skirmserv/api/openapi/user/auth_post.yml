@@ -22,6 +22,9 @@ responses:
     description: The user was registered and authenticated
     schema:
       id: AuthInfo
+      required:
+        - message
+        - access_token
       properties:
         message:
           type: string
