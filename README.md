@@ -22,6 +22,20 @@ To run the server using gunicorn, execute the following:
 gunicorn -c gunicorn_conf.py --worker-class eventlet  skirmserv:app
 ```
 
+### Config
+
+Following config variables may be set via environment variables:
+
+- `SECRET_KEY` - Secret key for flask
+- `LOGGING_LEVEL` - One of DEBUG, INFO, WARNING, ERROR, CRITICAL
+- `DB_TYPE` - One of sqlite, mysql or postgresql
+- `DB_LOCATION` - sqlite db path
+- `DB_HOST` - mysql/postgres host
+- `DB_PORT` - mysql/postgres port
+- `DB_DATABASE` - mysql/postgres database
+- `DB_USER` - mysql/postgres user
+- `DB_PASS` - mysql/postgres password
+
 ## Copyright Notice
 
 (C) 2022-2023 Ole Lange
