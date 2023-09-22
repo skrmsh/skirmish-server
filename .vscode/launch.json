@@ -13,8 +13,11 @@
             "env": {
                 "FLASK_APP": "skirmserv",
                 "FLASK_ENV": "development",
-                "SKIRMSERV_CFG": "default.cfg",
                 "FLASK_DEBUG": "1",
+                "SECRET_KEY": "DEBUGKEY",
+                "LOGGING_LEVEL": "DEBUG",
+                "DB_TYPE": "sqlite",
+                "DB_LOCATION": "db_dev.sqlite3",
             },
             "args": ["run", "--host", "0.0.0.0", "--port", "8080"]
         }
