@@ -27,7 +27,9 @@
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-    var socket = io("ws://localhost:8081");
+    var prot = window.location.protocol;
+    prot.replace("http", "ws");
+    var socket = io(`${prot}//${window.location.host}`);
 
     var form = document.getElementById('form');
     var input = document.getElementById('input');
