@@ -66,7 +66,7 @@ class Database(object):
                 user=current_app.config["DB_USER"],
                 password=current_app.config["DB_PASS"],
                 host=current_app.config["DB_HOST"],
-                port=current_app.config.get("DB_PORT", 3306),
+                port=int(current_app.config.get("DB_PORT", 3306)),
             )
 
         elif current_app.config["DB_TYPE"] == "postgresql":
