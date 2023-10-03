@@ -16,7 +16,7 @@ from flasgger import Swagger, swag_from
 
 # Creating Flask app & SocketIO server
 app = Flask(__name__)
-app.config.from_envvar("SKIRMSERV_CFG")
+app.config.from_pyfile("config.py")
 socketio = SocketIO(app, cors_allowed_origins="*")  # Socket IO websocket app
 flask_api = Api(app)  # Restful api
 
