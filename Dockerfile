@@ -1,4 +1,4 @@
-FROM python:3.8.10-slim-buster
+FROM python:3.12.0-slim-bookworm
 COPY ./skirmserv /app/skirmserv
 COPY ./gunicorn_conf.py /app/gunicorn_conf.py
 WORKDIR /app/
