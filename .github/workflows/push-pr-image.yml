@@ -1,7 +1,6 @@
 name: Skirmish Server CI (-> PR Image build)
 
 on:
-  push:
   pull_request:
     branches:
       - main
