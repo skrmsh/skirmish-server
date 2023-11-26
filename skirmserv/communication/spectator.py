@@ -62,6 +62,7 @@ class Spectator(object):
                     }
                 }
             ),
+            to=self.socket_id,
         )
         getLogger(__name__).debug(
             "Informed spectator %s that player %s got hit", str(self), str(player)
@@ -71,6 +72,7 @@ class Spectator(object):
         self.socketio.emit(
             "spectate",
             json.dumps({"shot": {"player": player.get_pgt_data(), "sid": sid}}),
+            to=self.socket_id,
         )
         getLogger(__name__).debug(
             "Informed spectator %s that player %s fired a shot", str(self), str(player)
