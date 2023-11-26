@@ -5,7 +5,7 @@ peewee
 argon2-cffi
 simple-websocket
 gunicorn
-gevent-websocket
+gevent
 flasgger
 pymysql
 cryptography
