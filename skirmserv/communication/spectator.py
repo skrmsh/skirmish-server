@@ -50,7 +50,7 @@ class Spectator(object):
         )
         getLogger(__name__).debug("Updated spectator %s", str(self))
 
-    def player_got_hit(self, player: Player, opponent: Player, sid: int):
+    def player_got_hit(self, player: Player, opponent: Player, sid: int, hp: int = 7):
         self.socketio.emit(
             "spectate",
             json.dumps(
@@ -59,6 +59,7 @@ class Spectator(object):
                         "player": player.get_pgt_data(),
                         "by": opponent.get_pgt_data(),
                         "sid": sid,
+                        "hp": hp,
                     }
                 }
             ),

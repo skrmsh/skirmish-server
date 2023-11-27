@@ -38,12 +38,16 @@ class Gamemode(object):
         game when the start gets scheduled."""
         pass
 
-    def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_got_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         """Override this method and handle what should happen
         when a player (player) got hit by another player (opponent)."""
         pass
 
-    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_has_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         """Override this method and handle what should happen
         when a player (player) has hit someone else (opponent)."""
         pass

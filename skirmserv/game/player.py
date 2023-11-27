@@ -93,7 +93,7 @@ class Player(object):
         for spectator in self.game.spectators:
             spectator.player_fired_shot(self, sid)
 
-    def got_hit(self, pid: int, sid: int) -> None:
+    def got_hit(self, pid: int, sid: int, hp: int = 7) -> None:
         """This function is called when the phaser/breast calls the
         Got Hit action with sid/pid parameter."""
 
@@ -107,26 +107,38 @@ class Player(object):
         # Let the gamemode handle this event
         # but first check if this shot has never hit before
         if not self.game.is_first_hit(self, sid):
-            self.game.gamemode.player_got_hit(self, opponent, sid)
+            self.game.gamemode.player_got_hit(self, opponent, sid, hp)
 
             # Also let the gamemode handle the event that the
             # other player has hit
-            self.game.gamemode.player_has_hit(opponent, self, sid)
+            self.game.gamemode.player_has_hit(opponent, self, sid, hp)
 
         # inform both clients about updates
         self.client.update()
         opponent.client.update()
 
+        hp_name = [
+            "Phaser",
+            "Chest",
+            "Back",
+            "Shoulder Left",
+            "Shoulder Right",
+            "Head",
+            "Hitpoint",
+            "Undefined",
+        ][hp]
+
         getLogger(__name__).debug(
-            "Player %s got hit by %s in game %s",
+            "Player %s got hit @ %s by %s in game %s",
             str(self),
+            hp_name,
             str(opponent),
             str(self.game),
         )
 
         self.game.update_spectators()
         for spectator in self.game.spectators:
-            spectator.player_got_hit(self, opponent, sid)
+            spectator.player_got_hit(self, opponent, sid, hp)
 
     def __str__(self):
         return "{0} ({1})".format(self.name, self.pid)

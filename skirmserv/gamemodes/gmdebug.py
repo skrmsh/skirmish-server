@@ -55,13 +55,17 @@ class GMDebug(Gamemode):
         player.phaser_enable = True
         player.phaser_disable_until = self.game.start_time
 
-    def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_got_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         player.phaser_disable_until = time.time() + self._inviolable_time
         player.inviolable_until = player.phaser_disable_until
 
         player.client.current_actions.add(player.client.ACTION_HIT_VALID)
 
-    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_has_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         player.points += 500
         player.client.current_actions.add(player.client.ACTION_SHOT_HIT)
 
