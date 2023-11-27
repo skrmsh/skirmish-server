@@ -247,13 +247,14 @@ class SocketClient(object):
             # Get pid and sid fields
             pid = data.get("pid", None)
             sid = data.get("sid", None)
+            hp = data.get("hp", None)
 
             # do not act on missing fields
             if pid is None or sid is None:
                 return
 
             # Trigger got_hit method from associated player
-            self.player.got_hit(pid, sid)
+            self.player.got_hit(pid, sid, hp)
 
     def _on_send_shot(self, data):
         """Send Shot event triggered by client"""
