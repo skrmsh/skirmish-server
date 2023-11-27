@@ -68,7 +68,9 @@ class Zombie(Gamemode):
         player.max_shot_interval = 300
         print(player.color)
 
-    def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_got_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         if player.team == self.team_alive and opponent.team == self.team_zombie:
             player.color = [0, 255, 0]
             player.health = 0
@@ -90,7 +92,9 @@ class Zombie(Gamemode):
 
         player.client.current_actions.add(player.client.ACTION_HIT_VALID)
 
-    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_has_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         if player.team == self.team_zombie:
             player.points += 100
 

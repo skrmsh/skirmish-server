@@ -67,7 +67,9 @@ class Deathmatch(Gamemode):
         player.phaser_enable = True
         player.phaser_disable_until = self.game.start_time
 
-    def player_got_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_got_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         # If the player will survive this shot
         if player.health > 10:
             player.health -= 10
@@ -83,7 +85,9 @@ class Deathmatch(Gamemode):
 
         player.client.current_actions.add(player.client.ACTION_HIT_VALID)
 
-    def player_has_hit(self, player: Player, opponent: Player, sid: int) -> None:
+    def player_has_hit(
+        self, player: Player, opponent: Player, sid: int, hp: int = 7
+    ) -> None:
         # Normal Hit
         if opponent.health > 0:
             player.points += 100
